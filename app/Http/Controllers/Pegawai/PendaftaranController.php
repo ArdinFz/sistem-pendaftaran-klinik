@@ -17,7 +17,7 @@ class PendaftaranController extends Controller
     {
         $search = $request->input('search');
         $tanggalAwal = $request->input('tanggal_awal', '2026-05-08');
-        $tanggalAkhir = $request->input('tanggal_akhir', '2026-05-09');
+        $tanggalAkhir = $request->input('tanggal_akhir', date('Y-m-d', strtotime('+30 days')));
         $selectedPoli = $request->input('poli');
         $selectedDokter = $request->input('dokter');
 

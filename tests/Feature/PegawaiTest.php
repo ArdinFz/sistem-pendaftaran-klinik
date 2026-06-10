@@ -21,7 +21,7 @@ class PegawaiTest extends TestCase
 
     public function test_pegawai_can_login_and_redirect_to_dashboard(): void
     {
-        $response = $this->post('/login', [
+        $response = $this->post(route('authenticate'), [
             'email' => 'nadia@gmail.com',
             'password' => 'klinik123',
         ]);
@@ -43,11 +43,11 @@ class PegawaiTest extends TestCase
             ->get(route('pegawai.dashboard'));
 
         $response->assertStatus(200);
-        $response->assertSee('Wanti Wanti');
         $response->assertSee('Rino Bleber');
         $response->assertSee('Dadang');
-        $response->assertSee('Ujang');
         $response->assertSee('Udang Keju');
+        $response->assertDontSee('Wanti Wanti');
+        $response->assertDontSee('Ujang');
     }
 
     public function test_pegawai_can_panggil_patient(): void

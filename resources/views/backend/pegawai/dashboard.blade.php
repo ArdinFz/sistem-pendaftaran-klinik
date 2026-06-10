@@ -64,109 +64,111 @@
             </a>
         </div>
 
-        <div class="border border-gray-200 rounded-lg p-5 bg-white space-y-2">
-            <!-- Headers Grid (12 Kolom Terbagi) -->
-            <div class="grid grid-cols-12 gap-2 text-center text-gray-700 font-bold text-sm">
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Nomor Antrean</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Nama Pasien</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Poli</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Dokter</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Jam</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-2">Status</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-2">Aksi</div>
-            </div>
+        <div class="border border-gray-200 rounded-lg p-5 bg-white overflow-x-auto">
+            <div class="space-y-2 min-w-[950px]">
+                <!-- Headers Grid (12 Kolom Terbagi) -->
+                <div class="grid grid-cols-12 gap-2 text-center text-gray-700 font-bold text-sm">
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Nomor Antrean</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Nama Pasien</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Poli</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Dokter</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Jam</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-2">Status</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-2">Aksi</div>
+                </div>
 
-            <!-- Rows Data Grid -->
-            @forelse ($antreans as $item)
-                <div class="grid grid-cols-12 gap-2 text-center items-center text-gray-600 text-sm">
-                    <!-- Nomor Antrean -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold col-span-1">{{ $item['nomor_antrean'] }}</div>
-                    
-                    <!-- Nama Pasien -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2">
-                        <span class="truncate" title="{{ $item['pasien'] }}">{{ $item['pasien'] }}</span>
-                    </div>
-                    
-                    <!-- Poli -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2 truncate" title="{{ $item['poli'] }}">{{ $item['poli'] }}</div>
-
-                    <!-- Dokter -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2 truncate" title="{{ $item['dokter'] }}">{{ $item['dokter'] }}</div>
-                    
-                    <!-- Jam -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1 font-semibold">{{ $item['jam'] }}</div>
-                    
-                    <!-- Status Badge -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-2.5 col-span-2 flex items-center justify-center">
-                        @if ($item['status'] === 'Dipanggil')
-                            <span class="inline-flex items-center px-3 py-1 bg-[#002d33] text-white text-xs font-bold rounded-lg shadow-sm">
-                                <!-- Spark/Pulse SVG Icon -->
-                                <svg class="w-3.5 h-3.5 mr-1.5 text-teal-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
-                                </svg>
-                                Dipanggil
-                            </span>
-                        @elseif ($item['status'] === 'Menunggu')
-                            <span class="inline-flex items-center px-3 py-1 bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold rounded-lg shadow-sm">
-                                <!-- Clock SVG Icon -->
-                                <svg class="w-3.5 h-3.5 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Menunggu
-                            </span>
-                        @else
-                            <span class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-lg shadow-sm">
-                                <!-- Checkmark SVG Icon -->
-                                <svg class="w-3.5 h-3.5 mr-1.5 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Selesai
-                            </span>
-                        @endif
-                    </div>
-                    
-                    <!-- Aksi (Panggil & Selesai) -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-2.5 flex items-center justify-center space-x-1.5 col-span-2 font-medium">
+                <!-- Rows Data Grid -->
+                @forelse ($antreans as $item)
+                    <div class="grid grid-cols-12 gap-2 text-center items-center text-gray-600 text-sm">
+                        <!-- Nomor Antrean -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold col-span-1">{{ $item['nomor_antrean'] }}</div>
                         
-                        <!-- Panggil Button -->
-                        @if ($item['status'] === 'Menunggu')
-                            <form action="{{ route('pegawai.dashboard.panggil', $item['id']) }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" 
-                                        class="inline-flex items-center px-2.5 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-[11px] font-bold rounded shadow-sm transition-colors">
+                        <!-- Nama Pasien -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2">
+                            <span class="truncate" title="{{ $item['pasien'] }}">{{ $item['pasien'] }}</span>
+                        </div>
+                        
+                        <!-- Poli -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2 truncate" title="{{ $item['poli'] }}">{{ $item['poli'] }}</div>
+
+                        <!-- Dokter -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2 truncate" title="{{ $item['dokter'] }}">{{ $item['dokter'] }}</div>
+                        
+                        <!-- Jam -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1 font-semibold">{{ $item['jam'] }}</div>
+                        
+                        <!-- Status Badge -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-2.5 col-span-2 flex items-center justify-center">
+                            @if ($item['status'] === 'Dipanggil')
+                                <span class="inline-flex items-center px-3 py-1 bg-[#002d33] text-white text-xs font-bold rounded-lg shadow-sm">
+                                    <!-- Spark/Pulse SVG Icon -->
+                                    <svg class="w-3.5 h-3.5 mr-1.5 text-teal-300 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                                    </svg>
+                                    Dipanggil
+                                </span>
+                            @elseif ($item['status'] === 'Menunggu')
+                                <span class="inline-flex items-center px-3 py-1 bg-gray-100 border border-gray-200 text-gray-600 text-xs font-bold rounded-lg shadow-sm">
+                                    <!-- Clock SVG Icon -->
+                                    <svg class="w-3.5 h-3.5 mr-1.5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Menunggu
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-lg shadow-sm">
+                                    <!-- Checkmark SVG Icon -->
+                                    <svg class="w-3.5 h-3.5 mr-1.5 text-green-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Selesai
+                                </span>
+                            @endif
+                        </div>
+                        
+                        <!-- Aksi (Panggil & Selesai) -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-2.5 flex items-center justify-center space-x-1.5 col-span-2 font-medium">
+                            
+                            <!-- Panggil Button -->
+                            @if ($item['status'] === 'Menunggu')
+                                <form action="{{ route('pegawai.dashboard.panggil', $item['id']) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            class="inline-flex items-center px-2.5 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-[11px] font-bold rounded shadow-sm transition-colors">
+                                        Panggil
+                                    </button>
+                                </form>
+                            @else
+                                <button type="button" disabled 
+                                        class="inline-flex items-center px-2.5 py-1 bg-gray-200 text-gray-400 text-[11px] font-bold rounded cursor-not-allowed">
                                     Panggil
                                 </button>
-                            </form>
-                        @else
-                            <button type="button" disabled 
-                                    class="inline-flex items-center px-2.5 py-1 bg-gray-200 text-gray-400 text-[11px] font-bold rounded cursor-not-allowed">
-                                Panggil
-                            </button>
-                        @endif
-                        
-                        <!-- Selesai Button -->
-                        @if ($item['status'] === 'Menunggu' || $item['status'] === 'Dipanggil')
-                            <form action="{{ route('pegawai.dashboard.selesai', $item['id']) }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" 
-                                        class="inline-flex items-center px-2.5 py-1 bg-[#10b981] hover:bg-[#059669] text-white text-[11px] font-bold rounded shadow-sm transition-colors">
+                            @endif
+                            
+                            <!-- Selesai Button -->
+                            @if ($item['status'] === 'Menunggu' || $item['status'] === 'Dipanggil')
+                                <form action="{{ route('pegawai.dashboard.selesai', $item['id']) }}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            class="inline-flex items-center px-2.5 py-1 bg-[#10b981] hover:bg-[#059669] text-white text-[11px] font-bold rounded shadow-sm transition-colors">
+                                        Selesai
+                                    </button>
+                                </form>
+                            @else
+                                <button type="button" disabled 
+                                        class="inline-flex items-center px-2.5 py-1 bg-gray-200 text-gray-400 text-[11px] font-bold rounded cursor-not-allowed">
                                     Selesai
                                 </button>
-                            </form>
-                        @else
-                            <button type="button" disabled 
-                                    class="inline-flex items-center px-2.5 py-1 bg-gray-200 text-gray-400 text-[11px] font-bold rounded cursor-not-allowed">
-                                Selesai
-                            </button>
-                        @endif
+                            @endif
 
+                        </div>
                     </div>
-                </div>
-            @empty
-                <div class="text-center py-6 text-gray-500 bg-white border border-gray-200 rounded-lg">
-                    Tidak ada antrean hari ini.
-                </div>
-            @endforelse
+                @empty
+                    <div class="text-center py-6 text-gray-500 bg-white border border-gray-200 rounded-lg col-span-12">
+                        Tidak ada antrean hari ini.
+                    </div>
+                @endforelse
+            </div>
         </div>
 
         <!-- Footer Ringkasan & Pagination Mockup -->

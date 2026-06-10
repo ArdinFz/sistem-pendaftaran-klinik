@@ -127,61 +127,19 @@ class DatabaseSeeder extends Seeder
         Pasien::updateOrCreate(
             ['id_pasien' => 'PAS001'],
             [
-                'nik' => '1234567890123456',
-                'email' => 'wira@gmail.com',
+                'nik' => '3273010505050005',
+                'email' => 'pasien@gmail.com',
                 'password' => Hash::make('pasien123'),
-                'nama' => 'Wira Sonic',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '2005-05-25',
+                'nama' => 'Udang Keju',
+                'jenis_kelamin' => 'Perempuan',
+                'tanggal_lahir' => '1999-02-18',
                 'no_hp' => '0852497264',
-                'alamat' => 'Jalan Asoman',
+                'alamat' => 'Bantul',
                 'foto' => null
             ]
         );
         Pasien::updateOrCreate(
             ['id_pasien' => 'PAS002'],
-            [
-                'nik' => '0987123432000000',
-                'email' => 'galang@gmail.com',
-                'password' => Hash::make('pasien123'),
-                'nama' => 'Galang Rading',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '1999-06-21',
-                'no_hp' => '089621327113',
-                'alamat' => 'Gg. Kasih Mandiri',
-                'foto' => null
-            ]
-        );
-        Pasien::updateOrCreate(
-            ['id_pasien' => 'PAS003'],
-            [
-                'nik' => '3273010101010003',
-                'email' => 'joki@gmail.com',
-                'password' => Hash::make('pasien123'),
-                'nama' => 'Joki',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '2001-04-12',
-                'no_hp' => '08123456703',
-                'alamat' => 'Yogyakarta',
-                'foto' => null
-            ]
-        );
-        Pasien::updateOrCreate(
-            ['id_pasien' => 'PAS004'],
-            [
-                'nik' => '1082301982301823',
-                'email' => 'wanti@gmail.com',
-                'password' => Hash::make('pasien123'),
-                'nama' => 'Wanti Wanti',
-                'jenis_kelamin' => 'Perempuan',
-                'tanggal_lahir' => '1990-05-13',
-                'no_hp' => '0819291209302',
-                'alamat' => 'Sleman',
-                'foto' => null
-            ]
-        );
-        Pasien::updateOrCreate(
-            ['id_pasien' => 'PAS005'],
             [
                 'nik' => '3273010202020002',
                 'email' => 'rino@gmail.com',
@@ -195,7 +153,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
         Pasien::updateOrCreate(
-            ['id_pasien' => 'PAS006'],
+            ['id_pasien' => 'PAS003'],
             [
                 'nik' => '3273010303030003',
                 'email' => 'dadang@gmail.com',
@@ -208,40 +166,12 @@ class DatabaseSeeder extends Seeder
                 'foto' => null
             ]
         );
-        Pasien::updateOrCreate(
-            ['id_pasien' => 'PAS007'],
-            [
-                'nik' => '3273010404040004',
-                'email' => 'ujang@gmail.com',
-                'password' => Hash::make('pasien123'),
-                'nama' => 'Ujang',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '2015-11-30',
-                'no_hp' => '08123456782',
-                'alamat' => 'Kulon Progo',
-                'foto' => null
-            ]
-        );
-        Pasien::updateOrCreate(
-            ['id_pasien' => 'PAS008'],
-            [
-                'nik' => '3273010505050005',
-                'email' => 'udangkeju@gmail.com',
-                'password' => Hash::make('pasien123'),
-                'nama' => 'Udang Keju',
-                'jenis_kelamin' => 'Perempuan',
-                'tanggal_lahir' => '1999-02-18',
-                'no_hp' => '081237192434',
-                'alamat' => 'Bantul',
-                'foto' => null
-            ]
-        );
 
         // 6. Data Pendaftaran (Registrasi)
         Pendaftaran::updateOrCreate(
             ['id_pendaftaran' => 'P001'],
             [
-                'id_user' => 'PAS008',
+                'id_user' => 'PAS001',
                 'id_jadwal' => 4,
                 'tanggal_daftar' => '2026-05-08 12:00:00',
                 'keluhan' => 'Gak tau dog, kayaknya flu deh ini dog, kemarin demam gitu dog, cuma sekarang sembuh dog, cuma kadang kejang-kejang juga dog, gimana ya dog? sembuhin atuh dog, dog kan dogter!',
@@ -251,7 +181,7 @@ class DatabaseSeeder extends Seeder
         Pendaftaran::updateOrCreate(
             ['id_pendaftaran' => 'P002'],
             [
-                'id_user' => 'PAS005',
+                'id_user' => 'PAS002',
                 'id_jadwal' => 2,
                 'tanggal_daftar' => '2026-05-08 08:00:00',
                 'keluhan' => 'Sakit kepala sebelah kanan saja sejak kemarin pagi, kepala terasa seperti berdenyut-denyut kencang saat beraktivitas berat.',
@@ -261,30 +191,10 @@ class DatabaseSeeder extends Seeder
         Pendaftaran::updateOrCreate(
             ['id_pendaftaran' => 'P003'],
             [
-                'id_user' => 'PAS006',
+                'id_user' => 'PAS003',
                 'id_jadwal' => 5,
                 'tanggal_daftar' => '2026-05-09 09:15:00',
                 'keluhan' => 'Gigi geraham belakang kanan bawah berlubang besar dan terasa sangat linu ketika dipakai makan manis atau minum air dingin.',
-                'status' => 'Menunggu'
-            ]
-        );
-        Pendaftaran::updateOrCreate(
-            ['id_pendaftaran' => 'P004'],
-            [
-                'id_user' => 'PAS004',
-                'id_jadwal' => 1,
-                'tanggal_daftar' => '2026-05-08 08:00:00',
-                'keluhan' => 'Badan meriang gatal-gatal di seluruh tubuh sejak kemarin malam setelah makan kepiting.',
-                'status' => 'Dipanggil'
-            ]
-        );
-        Pendaftaran::updateOrCreate(
-            ['id_pendaftaran' => 'P005'],
-            [
-                'id_user' => 'PAS007',
-                'id_jadwal' => 3,
-                'tanggal_daftar' => '2026-05-09 12:00:00',
-                'keluhan' => 'Badan anak demam naik turun sejak 3 hari lalu, pilek mampet, batuk berdahak, serta tidak mau makan sama sekali.',
                 'status' => 'Menunggu'
             ]
         );
@@ -293,10 +203,10 @@ class DatabaseSeeder extends Seeder
         Antrean::updateOrCreate(
             ['id_antrean' => 'ANT001'],
             [
-                'id_pendaftaran' => 'P004',
-                'nomor_antrean' => 505,
-                'status_antrean' => 'Dipanggil',
-                'waktu_antrean' => '08:00:00'
+                'id_pendaftaran' => 'P001',
+                'nomor_antrean' => 143,
+                'status_antrean' => 'Selesai',
+                'waktu_antrean' => '09:00:00'
             ]
         );
         Antrean::updateOrCreate(
@@ -315,24 +225,6 @@ class DatabaseSeeder extends Seeder
                 'nomor_antrean' => 871,
                 'status_antrean' => 'Menunggu',
                 'waktu_antrean' => '08:30:00'
-            ]
-        );
-        Antrean::updateOrCreate(
-            ['id_antrean' => 'ANT004'],
-            [
-                'id_pendaftaran' => 'P005',
-                'nomor_antrean' => 645,
-                'status_antrean' => 'Menunggu',
-                'waktu_antrean' => '12:00:00'
-            ]
-        );
-        Antrean::updateOrCreate(
-            ['id_antrean' => 'ANT005'],
-            [
-                'id_pendaftaran' => 'P001',
-                'nomor_antrean' => 143,
-                'status_antrean' => 'Selesai',
-                'waktu_antrean' => '09:00:00'
             ]
         );
     }

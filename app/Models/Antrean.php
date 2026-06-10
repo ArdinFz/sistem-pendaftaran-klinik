@@ -77,7 +77,7 @@ class Antrean extends Model
 
     public function getJamAttribute()
     {
-        return $this->waktu_antrean;
+        return $this->waktu_antrean ? date('H:i', strtotime($this->waktu_antrean)) : '';
     }
 
     public function getStatusAttribute()

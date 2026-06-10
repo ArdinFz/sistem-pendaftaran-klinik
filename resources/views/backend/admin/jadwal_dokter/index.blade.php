@@ -40,74 +40,79 @@
 
     <!-- Tabel Grid Jadwal Dokter (Boxy Format) -->
     <div class="border border-gray-200 rounded-lg p-5 bg-white">
-        <div class="space-y-2">
-            <!-- Headers Grid (12 Kolom Terbagi) -->
-            <div class="grid grid-cols-12 gap-2 text-center text-gray-700 font-bold text-sm">
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">No</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Dokter</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Poliklinik</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Hari</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Jam Mulai</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Jam Selesai</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Kuota</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-3">Aksi</div>
-            </div>
+        <div class="overflow-x-auto">
+            <div class="space-y-2 min-w-[950px]">
+                <!-- Headers Grid (12 Kolom Terbagi) -->
+                <div class="grid grid-cols-12 gap-2 text-center text-gray-700 font-bold text-sm">
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">No</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Dokter</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">Poliklinik</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Hari / Tanggal</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Jam Mulai</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Jam Selesai</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">Kuota</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-3">Aksi</div>
+                </div>
 
-            <!-- Rows Data Grid -->
-            @php $no = 1; @endphp
-            @forelse ($jadwals as $jadwal)
-                <div class="grid grid-cols-12 gap-2 text-center items-center text-gray-600 text-sm">
-                    <!-- No -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold col-span-1">{{ $no++ }}</div>
-                    
-                    <!-- Dokter -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2">{{ $jadwal['dokter'] }}</div>
-                    
-                    <!-- Poliklinik -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">{{ $jadwal['poliklinik'] }}</div>
-                    
-                    <!-- Hari -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">{{ $jadwal['hari'] }}</div>
-                    
-                    <!-- Jam Mulai -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">{{ $jadwal['jam_mulai'] }}</div>
-                    
-                    <!-- Jam Selesai -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">{{ $jadwal['jam_selesai'] }}</div>
-                    
-                    <!-- Kuota -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold text-teal-600 col-span-1">{{ $jadwal['kuota'] }}</div>
-                    
-                    <!-- Aksi (Edit & Hapus) -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-2.5 flex items-center justify-center space-x-2 col-span-3">
-                        <!-- Edit Button (Biru dengan icon edit.png) -->
-                        <a href="{{ route('admin.jadwal-dokter.edit', $jadwal['id']) }}" 
-                            class="inline-flex items-center px-3 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-xs font-bold rounded shadow-sm transition-colors">
-                            <img src="{{ asset('assets/images/edit.png') }}" class="w-3 h-3 mr-1 object-contain brightness-0 invert" alt="">
-                            Edit
-                        </a>
+                <!-- Rows Data Grid -->
+                @php $no = 1; @endphp
+                @forelse ($jadwals as $jadwal)
+                    <div class="grid grid-cols-12 gap-2 text-center items-center text-gray-600 text-sm">
+                        <!-- No -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold col-span-1">{{ $no++ }}</div>
                         
-                        <!-- Hapus Button (Red Form) -->
-                        <form action="{{ route('admin.jadwal-dokter.destroy', $jadwal['id']) }}" method="POST" 
-                            onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?');" class="inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" 
-                                class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow-sm transition-colors">
-                                <!-- Trash Icon SVG -->
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                </svg>
-                                Hapus
-                            </button>
-                        </form>
+                        <!-- Dokter -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2">{{ $jadwal['dokter'] }}</div>
+                        
+                        <!-- Poliklinik -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left col-span-2">{{ $jadwal['poliklinik'] }}</div>
+                        
+                        <!-- Hari / Tanggal -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1 leading-snug">
+                            {{ $jadwal['hari'] }}<br>
+                            <span class="text-[10px] text-gray-400 font-semibold">{{ $jadwal->tanggal ? $jadwal->tanggal->format('d-m-Y') : '' }}</span>
+                        </div>
+                        
+                        <!-- Jam Mulai -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">{{ date('H:i', strtotime($jadwal['jam_mulai'])) }}</div>
+                        
+                        <!-- Jam Selesai -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 col-span-1">{{ date('H:i', strtotime($jadwal['jam_selesai'])) }}</div>
+                        
+                        <!-- Kuota -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold text-teal-600 col-span-1">{{ $jadwal['kuota'] }}</div>
+                        
+                        <!-- Aksi (Edit & Hapus) -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-2.5 flex items-center justify-center space-x-2 col-span-3">
+                            <!-- Edit Button (Biru dengan icon edit.png) -->
+                            <a href="{{ route('admin.jadwal-dokter.edit', $jadwal['id']) }}" 
+                                class="inline-flex items-center px-3 py-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white text-xs font-bold rounded shadow-sm transition-colors">
+                                <img src="{{ asset('assets/images/edit.png') }}" class="w-3 h-3 mr-1 object-contain brightness-0 invert" alt="">
+                                Edit
+                            </a>
+                            
+                            <!-- Hapus Button (Red Form) -->
+                            <form action="{{ route('admin.jadwal-dokter.destroy', $jadwal['id']) }}" method="POST" 
+                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?');" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" 
+                                    class="inline-flex items-center px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded shadow-sm transition-colors">
+                                    <!-- Trash Icon SVG -->
+                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Hapus
+                                </button>
+                            </form>
+                        </div>
                     </div>
-                </div>
-            @empty
-                <div class="text-center py-6 text-gray-500 bg-white border border-gray-200 rounded-lg">
-                    Tidak ada jadwal dokter ditemukan.
-                </div>
-            @endforelse
+                @empty
+                    <div class="text-center py-6 text-gray-500 bg-white border border-gray-200 rounded-lg col-span-12">
+                        Tidak ada jadwal dokter ditemukan.
+                    </div>
+                @endforelse
+            </div>
         </div>
 
         <!-- Footer Ringkasan & Pagination Mockup -->

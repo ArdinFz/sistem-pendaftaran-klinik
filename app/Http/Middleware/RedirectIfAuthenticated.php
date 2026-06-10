@@ -25,6 +25,8 @@ class RedirectIfAuthenticated
                     return redirect()->route('admin.dashboard');
                 } elseif ($guard === 'pegawai') {
                     return redirect()->route('pegawai.dashboard');
+                } elseif ($guard === 'pasien') {
+                    return redirect()->route('pasien.dashboard');
                 }
                 
                 $user = Auth::guard($guard)->user();
@@ -32,6 +34,8 @@ class RedirectIfAuthenticated
                     return redirect()->route('admin.dashboard');
                 } elseif ($user instanceof \App\Models\Pegawai) {
                     return redirect()->route('pegawai.dashboard');
+                } elseif ($user instanceof \App\Models\Pasien) {
+                    return redirect()->route('pasien.dashboard');
                 }
                 
                 return redirect(RouteServiceProvider::HOME);

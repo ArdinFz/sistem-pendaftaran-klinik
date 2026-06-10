@@ -62,48 +62,49 @@
 
     <!-- Tabel Laporan Pendaftaran (Format Boxy) -->
     <div class="border border-gray-200 rounded-lg p-5 bg-white">
-        
-        <div class="space-y-2">
-            <!-- Table Headers -->
-            <div class="grid grid-cols-6 gap-2 text-center text-gray-700 font-bold text-sm">
-                <div class="bg-white border border-gray-200 rounded-lg p-3">No</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">Tanggal</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">Pasien</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">Dokter</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">Poli</div>
-                <div class="bg-white border border-gray-200 rounded-lg p-3">Aksi</div>
-            </div>
+        <div class="overflow-x-auto">
+            <div class="space-y-2 min-w-[850px]">
+                <!-- Table Headers -->
+                <div class="grid grid-cols-6 gap-2 text-center text-gray-700 font-bold text-sm">
+                    <div class="bg-white border border-gray-200 rounded-lg p-3">No</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3">Tanggal</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">Pasien</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">Dokter</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">Poli</div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3">Aksi</div>
+                </div>
 
-            <!-- Data Rows -->
-            @forelse ($pendaftarans as $pendaftaran)
-                <div class="grid grid-cols-6 gap-2 text-center items-center text-gray-600 text-sm">
-                    <!-- No -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold">{{ $pendaftaran->no }}</div>
-                    
-                    <!-- Tanggal -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3">{{ \Carbon\Carbon::parse($pendaftaran->tanggal)->format('d-m-Y') }}</div>
-                    
-                    <!-- Pasien -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium">{{ $pendaftaran->pasien }}</div>
-                    
-                    <!-- Dokter -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $pendaftaran->dokter }}</div>
-                    
-                    <!-- Poli -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $pendaftaran->poli }}</div>
-                    
-                    <!-- Aksi (Detail) -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-2.5 flex items-center justify-center">
-                        <a href="{{ route('admin.laporan.show', $pendaftaran->no) }}" class="inline-flex items-center px-3.5 py-1 bg-[#0d9488] hover:bg-[#0f766e] text-white text-xs font-bold rounded shadow-sm transition-colors">
-                            Detail
-                        </a>
+                <!-- Data Rows -->
+                @forelse ($pendaftarans as $pendaftaran)
+                    <div class="grid grid-cols-6 gap-2 text-center items-center text-gray-600 text-sm">
+                        <!-- No -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold">{{ $pendaftaran->no }}</div>
+                        
+                        <!-- Tanggal -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3">{{ \Carbon\Carbon::parse($pendaftaran->tanggal)->format('d-m-Y') }}</div>
+                        
+                        <!-- Pasien -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium">{{ $pendaftaran->pasien }}</div>
+                        
+                        <!-- Dokter -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $pendaftaran->dokter }}</div>
+                        
+                        <!-- Poli -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $pendaftaran->poli }}</div>
+                        
+                        <!-- Aksi (Detail) -->
+                        <div class="bg-white border border-gray-200 rounded-lg p-2.5 flex items-center justify-center">
+                            <a href="{{ route('admin.laporan.show', $pendaftaran->no) }}" class="inline-flex items-center px-3.5 py-1 bg-[#0d9488] hover:bg-[#0f766e] text-white text-xs font-bold rounded shadow-sm transition-colors">
+                                Detail
+                            </a>
+                        </div>
                     </div>
-                </div>
-            @empty
-                <div class="text-center py-6 text-gray-500 bg-white border border-gray-200 rounded-lg">
-                    Tidak ada data pendaftaran pada periode ini.
-                </div>
-            @endforelse
+                @empty
+                    <div class="text-center py-6 text-gray-500 bg-white border border-gray-200 rounded-lg col-span-6">
+                        Tidak ada data pendaftaran pada periode ini.
+                    </div>
+                @endforelse
+            </div>
         </div>
 
         <!-- Footer Ringkasan & Pagination -->

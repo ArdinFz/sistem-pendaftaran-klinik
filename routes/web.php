@@ -21,21 +21,19 @@ use App\Http\Controllers\Admin\LaporanController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [App\Http\Controllers\Pasien\PasienAuthController::class, 'home'])->name('pasien.home');
 
-// route untuk autentikasi akun
-Route::get('/login', [AuthController::class, 'login'])
+// route untuk autentikasi akun backend (Admin & Pegawai)
+Route::get('/backend/login', [AuthController::class, 'login'])
     ->name('login');
 
-Route::post('/login', [AuthController::class, 'authenticate'])
+Route::post('/backend/login', [AuthController::class, 'authenticate'])
     ->name('authenticate');
 
 Route::any('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
-// Lupa Password visual flow
+// Lupa Password visual doank
 Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])
     ->name('password.forgot');
 Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])
@@ -118,3 +116,29 @@ Route::prefix('pegawai')
         Route::get('/pendaftaran/{id}', [App\Http\Controllers\Pegawai\PendaftaranController::class, 'show'])
             ->name('pendaftaran.show');
     });
+
+// Frontend
+Route::prefix('pasien')->as('pasien.')->group(function () {
+    Route::get('/welcome', [App\Http\Controllers\Pasien\PasienAuthController::class, 'welcome'])->name('welcome');
+    Route::middleware('guest:pasien')->group(function () {
+        Route::get('/login', [App\Http\Controllers\Pasien\PasienAuthController::class, 'loginForm'])->name('login');
+        Route::post('/login', [App\Http\Controllers\Pasien\PasienAuthController::class, 'login'])->name('login.post');
+        Route::get('/register', [App\Http\Controllers\Pasien\PasienAuthController::class, 'registerForm'])->name('register');
+        Route::post('/register', [App\Http\Controllers\Pasien\PasienAuthController::class, 'register'])->name('register.post');
+        
+        // Lupa Password Pasien visual flow
+        Route::get('/forgot-password', [App\Http\Controllers\Pasien\PasienAuthController::class, 'forgotPassword'])->name('password.forgot');
+        Route::post('/forgot-password', [App\Http\Controllers\Pasien\PasienAuthController::class, 'forgotPasswordSend'])->name('password.forgot.send');
+        Route::get('/forgot-password/verify', [App\Http\Controllers\Pasien\PasienAuthController::class, 'verifyOtp'])->name('password.forgot.verify');
+        Route::post('/forgot-password/verify', [App\Http\Controllers\Pasien\PasienAuthController::class, 'verifyOtpCheck'])->name('password.forgot.verify.check');
+        Route::get('/forgot-password/reset', [App\Http\Controllers\Pasien\PasienAuthController::class, 'resetPassword'])->name('password.forgot.reset');
+        Route::post('/forgot-password/reset', [App\Http\Controllers\Pasien\PasienAuthController::class, 'resetPasswordSave'])->name('password.forgot.reset.save');
+    });
+
+    Route::middleware('auth:pasien')->group(function () {
+        Route::get('/dashboard', [App\Http\Controllers\Pasien\PasienAuthController::class, 'dashboard'])->name('dashboard');
+        Route::post('/logout', [App\Http\Controllers\Pasien\PasienAuthController::class, 'logout'])->name('logout');
+        Route::get('/get-schedules', [App\Http\Controllers\Pasien\PasienAuthController::class, 'getSchedules'])->name('get-schedules');
+        Route::post('/pendaftaran/simpan', [App\Http\Controllers\Pasien\PasienAuthController::class, 'storePendaftaran'])->name('pendaftaran.store');
+    });
+});
