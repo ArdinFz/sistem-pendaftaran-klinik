@@ -76,7 +76,7 @@
                         <th class="bg-white border border-gray-200 rounded-lg p-3 text-center whitespace-nowrap min-w-[50px]">No</th>
                         <th class="bg-white border border-gray-200 rounded-lg p-3 text-center whitespace-nowrap min-w-[120px]">Tanggal Daftar</th>
                         <th class="bg-white border border-gray-200 rounded-lg p-3 text-center whitespace-nowrap min-w-[100px]">Hari</th>
-                        <th class="bg-white border border-gray-200 rounded-lg p-3 text-center whitespace-nowrap min-w-[80px]">Jam</th>
+                        <th class="bg-white border border-gray-200 rounded-lg p-3 text-center whitespace-nowrap min-w-[120px]">Jam</th>
                         <th class="bg-white border border-gray-200 rounded-lg p-3 text-left whitespace-nowrap min-w-[150px]">NIK</th>
                         <th class="bg-white border border-gray-200 rounded-lg p-3 text-left whitespace-nowrap min-w-[240px]">Email / No. Hp</th>
                         <th class="bg-white border border-gray-200 rounded-lg p-3 text-left whitespace-nowrap min-w-[180px]">Pasien</th>
@@ -91,16 +91,11 @@
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-center font-semibold">{{ $index + 1 }}</td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-center font-medium">{{ \Carbon\Carbon::parse($item['tanggal'])->format('d-m-Y') }}</td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-center">{{ $item['hari'] }}</td>
-                            <td class="bg-white border border-gray-200 rounded-lg p-3 text-center font-semibold">{{ $item['jam'] }}</td>
+                            <td class="bg-white border border-gray-200 rounded-lg p-3 text-center font-semibold whitespace-nowrap">{{ $item['jam'] }}</td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-left font-mono">{{ $item['nik'] }}</td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $item['email'] }} / {{ $item['no_hp'] }}</td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-left font-semibold text-gray-800">
-                                <div class="flex items-center space-x-2">
-                                    <div class="w-6 h-6 rounded-full bg-teal-50 flex items-center justify-center border border-gray-200 text-teal-600 font-bold text-[10px]">
-                                        {{ strtoupper(substr($item['pasien'], 0, 1)) }}
-                                    </div>
-                                    <span>{{ $item['pasien'] }}</span>
-                                </div>
+                                <span>{{ $item['pasien'] }}</span>
                             </td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $item['dokter'] }}</td>
                             <td class="bg-white border border-gray-200 rounded-lg p-3 text-left">{{ $item['poli'] }}</td>

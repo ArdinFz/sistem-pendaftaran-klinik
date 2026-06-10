@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
+use App\Models\Pegawai;
 use App\Models\Antrean;
 use App\Models\Pendaftaran;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -37,9 +37,9 @@ class PegawaiTest extends TestCase
 
     public function test_pegawai_can_access_dashboard_and_see_queue(): void
     {
-        $pegawai = User::where('role', 'pegawai')->first();
+        $pegawai = Pegawai::first();
 
-        $response = $this->actingAs($pegawai)
+        $response = $this->actingAs($pegawai, 'pegawai')
             ->get(route('pegawai.dashboard'));
 
         $response->assertStatus(200);
@@ -52,60 +52,64 @@ class PegawaiTest extends TestCase
 
     public function test_pegawai_can_panggil_patient(): void
     {
-        $pegawai = User::where('role', 'pegawai')->first();
-        $dadang = Antrean::where('pasien', 'Dadang')->firstOrFail();
+        $pegawai = Pegawai::first();
+        $dadang = Antrean::whereHas('pendaftaran.pasien', function($q) {
+            $q->where('nama', 'Dadang');
+        })->firstOrFail();
 
         // Call panggil with Dadang's dynamic ID
-        $response = $this->actingAs($pegawai)
-            ->post(route('pegawai.dashboard.panggil', $dadang->id));
+        $response = $this->actingAs($pegawai, 'pegawai')
+            ->post(route('pegawai.dashboard.panggil', $dadang->id_antrean));
 
         $response->assertRedirect(route('pegawai.dashboard'));
         $response->assertSessionHas('success');
 
         // Check if status updated in database
         $this->assertDatabaseHas('antreans', [
-            'id' => $dadang->id,
-            'status' => 'Dipanggil'
+            'id_antrean' => $dadang->id_antrean,
+            'status_antrean' => 'Dipanggil'
         ]);
 
         // Check if synchronized status in pendaftarans table (Dadang is Pendaftaran with no '003')
         $this->assertDatabaseHas('pendaftarans', [
-            'no' => '003',
+            'id_pendaftaran' => 'P003',
             'status' => 'Dipanggil'
         ]);
     }
 
     public function test_pegawai_can_selesai_patient(): void
     {
-        $pegawai = User::where('role', 'pegawai')->first();
-        $dadang = Antrean::where('pasien', 'Dadang')->firstOrFail();
+        $pegawai = Pegawai::first();
+        $dadang = Antrean::whereHas('pendaftaran.pasien', function($q) {
+            $q->where('nama', 'Dadang');
+        })->firstOrFail();
 
         // Call selesai with Dadang's dynamic ID
-        $response = $this->actingAs($pegawai)
-            ->post(route('pegawai.dashboard.selesai', $dadang->id));
+        $response = $this->actingAs($pegawai, 'pegawai')
+            ->post(route('pegawai.dashboard.selesai', $dadang->id_antrean));
 
         $response->assertRedirect(route('pegawai.dashboard'));
         $response->assertSessionHas('success');
 
         // Check if status updated in database
         $this->assertDatabaseHas('antreans', [
-            'id' => $dadang->id,
-            'status' => 'Selesai'
+            'id_antrean' => $dadang->id_antrean,
+            'status_antrean' => 'Selesai'
         ]);
 
         // Check if synchronized status in pendaftarans table
         $this->assertDatabaseHas('pendaftarans', [
-            'no' => '003',
+            'id_pendaftaran' => 'P003',
             'status' => 'Selesai'
         ]);
     }
 
     public function test_pegawai_can_access_pendaftaran_with_filters(): void
     {
-        $pegawai = User::where('role', 'pegawai')->first();
+        $pegawai = Pegawai::first();
 
         // Access index page
-        $response = $this->actingAs($pegawai)
+        $response = $this->actingAs($pegawai, 'pegawai')
             ->get(route('pegawai.pendaftaran.index'));
 
         $response->assertStatus(200);
@@ -114,14 +118,14 @@ class PegawaiTest extends TestCase
         $response->assertSee('Rino Bleber');
 
         // Access with search filter
-        $responseFiltered = $this->actingAs($pegawai)
+        $responseFiltered = $this->actingAs($pegawai, 'pegawai')
             ->get(route('pegawai.pendaftaran.index', ['search' => 'Udang']));
         
         $responseFiltered->assertSee('Udang Keju');
         $responseFiltered->assertDontSee('Rino Bleber');
 
         // Access with poli filter
-        $responsePoli = $this->actingAs($pegawai)
+        $responsePoli = $this->actingAs($pegawai, 'pegawai')
             ->get(route('pegawai.pendaftaran.index', ['poli' => 'Poli Bedah']));
         
         $responsePoli->assertSee('Udang Keju');
@@ -130,11 +134,11 @@ class PegawaiTest extends TestCase
 
     public function test_pegawai_can_view_pendaftaran_detail(): void
     {
-        $pegawai = User::where('role', 'pegawai')->first();
+        $pegawai = Pegawai::first();
 
         // Access detail page for 001 (Udang Keju)
-        $response = $this->actingAs($pegawai)
-            ->get(route('pegawai.pendaftaran.show', '001'));
+        $response = $this->actingAs($pegawai, 'pegawai')
+            ->get(route('pegawai.pendaftaran.show', 'P001'));
 
         $response->assertStatus(200);
         $response->assertSee('Detail Pendaftaran Pasien');

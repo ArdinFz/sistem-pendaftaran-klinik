@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('antreans', function (Blueprint $table) {
-            $table->id();
-            $table->string('nomor_antrean');
-            $table->string('pasien');
-            $table->string('poli');
-            $table->string('dokter');
-            $table->string('jam');
-            $table->string('status')->default('Menunggu');
-            $table->date('tanggal');
+            $table->string('id_antrean', 6)->primary();
+            $table->string('id_pendaftaran', 6);
+            $table->integer('nomor_antrean');
+            $table->enum('status_antrean', ['Menunggu', 'Dipanggil', 'Selesai'])->default('Menunggu');
+            $table->time('waktu_antrean');
             $table->timestamps();
+
+            $table->foreign('id_pendaftaran')
+                  ->references('id_pendaftaran')
+                  ->on('pendaftarans')
+                  ->onDelete('cascade');
         });
     }
 

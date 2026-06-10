@@ -12,25 +12,23 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('pendaftarans', function (Blueprint $table) {
-            $table->id();
-            $table->string('no');
-            $table->string('id_pendaftaran');
-            $table->date('tanggal');
-            $table->string('nomor_antrean');
-            $table->string('hari');
-            $table->string('jam');
-            $table->string('nik');
-            $table->string('email');
-            $table->string('no_hp');
-            $table->string('pasien');
-            $table->string('dokter');
-            $table->string('poli');
-            $table->string('jenis_kelamin');
-            $table->date('tanggal_lahir');
-            $table->text('alamat');
+            $table->string('id_pendaftaran', 6)->primary();
+            $table->string('id_user', 6);
+            $table->unsignedInteger('id_jadwal');
+            $table->dateTime('tanggal_daftar');
             $table->text('keluhan');
-            $table->string('status')->default('Menunggu');
+            $table->enum('status', ['Menunggu', 'Dipanggil', 'Selesai'])->default('Menunggu');
             $table->timestamps();
+
+            $table->foreign('id_user')
+                  ->references('id_pasien')
+                  ->on('pasiens')
+                  ->onDelete('cascade');
+
+            $table->foreign('id_jadwal')
+                  ->references('id_jadwal')
+                  ->on('jadwal_dokters')
+                  ->onDelete('cascade');
         });
     }
 

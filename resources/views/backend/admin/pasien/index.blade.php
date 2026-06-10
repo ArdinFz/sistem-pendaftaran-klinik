@@ -51,15 +51,8 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold col-span-1">{{ $pasien['no'] }}</div>
                     
                     <!-- Nama Pasien -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2 flex items-center space-x-2">
-                        @if($pasien['foto'])
-                            <img src="{{ asset($pasien['foto']) }}" class="w-6 h-6 rounded-full object-cover border border-gray-200" alt="">
-                        @else
-                            <div class="w-6 h-6 rounded-full bg-teal-50 flex items-center justify-center border border-gray-200 text-teal-600 font-bold text-[10px]">
-                                {{ strtoupper(substr($pasien['name'], 0, 1)) }}
-                            </div>
-                        @endif
-                        <span>{{ $pasien['name'] }}</span>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2">
+                        {{ $pasien['name'] }}
                     </div>
                     
                     <!-- NIK -->

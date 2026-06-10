@@ -18,7 +18,7 @@ class PoliklinikController extends Controller
         $polikliniks = Poliklinik::query()
             ->when($search, function ($query, $search) {
                 $query->where('nama_poli', 'like', "%{$search}%")
-                      ->orWhere('deskripsi', 'like', "%{$search}%");
+                      ->orWhere('deskripsi_poli', 'like', "%{$search}%");
             })
             ->get();
 
@@ -43,9 +43,15 @@ class PoliklinikController extends Controller
             'deskripsi' => 'required|string'
         ]);
 
+        // Generate ID: format PL01
+        $latest = Poliklinik::orderBy('id_poli', 'desc')->first();
+        $num = $latest ? ((int) substr($latest->id_poli, 2) + 1) : 1;
+        $newId = 'PL' . str_pad($num, 2, '0', STR_PAD_LEFT);
+
         Poliklinik::create([
+            'id_poli' => $newId,
             'nama_poli' => $request->nama_poli,
-            'deskripsi' => $request->deskripsi
+            'deskripsi_poli' => $request->deskripsi
         ]);
 
         return redirect()->route('admin.poliklinik.index')
@@ -74,7 +80,7 @@ class PoliklinikController extends Controller
         $poliklinik = Poliklinik::findOrFail($id);
         $poliklinik->update([
             'nama_poli' => $request->nama_poli,
-            'deskripsi' => $request->deskripsi
+            'deskripsi_poli' => $request->deskripsi
         ]);
 
         return redirect()->route('admin.poliklinik.index')

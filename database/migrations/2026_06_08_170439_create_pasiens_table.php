@@ -6,21 +6,19 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('pasiens', function (Blueprint $table) {
-            $table->id();
-            $table->string('no');
-            $table->string('name');
-            $table->string('nik');
-            $table->string('email');
+            $table->string('id_pasien', 6)->primary();
+            $table->char('nik', 16)->unique();
+            $table->string('email', 100)->unique();
+            $table->string('password', 255);
+            $table->string('nama', 100);
+            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan']);
             $table->date('tanggal_lahir');
-            $table->string('no_hp');
-            $table->text('alamat');
-            $table->string('foto')->nullable();
+            $table->string('no_hp', 13);
+            $table->text('alamat')->nullable();
+            $table->string('foto', 255)->nullable();
             $table->timestamps();
         });
     }

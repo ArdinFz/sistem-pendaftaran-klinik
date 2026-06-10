@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
+use App\Models\Admin;
+use App\Models\Pegawai;
 use App\Models\Poliklinik;
 use App\Models\Dokter;
 use App\Models\JadwalDokter;
@@ -19,112 +20,118 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // 1. Akun Default (Admin, Pegawai, Pasien)
-        User::updateOrCreate(
-            ['email' => 'admin@klinik.com'],
+        // 1. Akun Default (Admin, Pegawai)
+        Admin::updateOrCreate(
+            ['id_admin' => 'ADM001'],
             [
-                'name' => 'Ketoprak',
+                'email' => 'admin@gmail.com',
                 'password' => Hash::make('admin123'),
-                'role' => 'admin',
-                'nik' => '1234567890123456',
+                'Nama' => 'Ketoprak',
                 'no_hp' => '08123456789',
-                'jenis_kelamin' => 'L',
-                'tanggal_lahir' => '1995-05-15',
-                'status' => 'aktif',
             ]
         );
 
-        User::updateOrCreate(
-            ['email' => 'abdi@gmail.com'],
+        Admin::updateOrCreate(
+            ['id_admin' => 'ADM002'],
             [
-                'name' => 'Abdi',
+                'email' => 'abdi@gmail.com',
                 'password' => Hash::make('klinik123'),
-                'role' => 'admin',
-                'nik' => '3273010101010001',
+                'Nama' => 'Abdi',
                 'no_hp' => '08123456701',
-                'jenis_kelamin' => 'L',
-                'tanggal_lahir' => '1990-08-20',
-                'status' => 'aktif',
             ]
         );
 
-        User::updateOrCreate(
-            ['email' => 'nadia@gmail.com'],
+        Pegawai::updateOrCreate(
+            ['id_pegawai' => 'PGW001'],
             [
-                'name' => 'Nadia',
+                'email' => 'nadia@gmail.com',
                 'password' => Hash::make('klinik123'),
-                'role' => 'pegawai',
-                'nik' => '3273010101010002',
+                'nama_pegawai' => 'Nadia',
                 'no_hp' => '08123456702',
-                'jenis_kelamin' => 'P',
-                'tanggal_lahir' => '1998-12-05',
-                'status' => 'aktif',
             ]
         );
 
-        User::updateOrCreate(
-            ['email' => 'joki@gmail.com'],
+        Pegawai::updateOrCreate(
+            ['id_pegawai' => 'PGW002'],
             [
-                'name' => 'Joki',
-                'password' => Hash::make('klinik123'),
-                'role' => 'pasien',
-                'nik' => '3273010101010003',
-                'no_hp' => '08123456703',
-                'jenis_kelamin' => 'L',
-                'tanggal_lahir' => '2001-04-12',
-                'status' => 'aktif',
+                'email' => 'pegawai@gmail.com',
+                'password' => Hash::make('pegawai123'),
+                'nama_pegawai' => 'Pegawai Default',
+                'no_hp' => '08123456799',
             ]
         );
 
         // 2. Data Master Poliklinik
         Poliklinik::updateOrCreate(
-            ['nama_poli' => 'Poli Umum'],
-            ['deskripsi' => 'Pelayanan Kesehatan Umum']
+            ['id_poli' => 'PL01'],
+            ['nama_poli' => 'Poli Umum', 'deskripsi_poli' => 'Pelayanan Kesehatan Umum']
         );
         Poliklinik::updateOrCreate(
-            ['nama_poli' => 'Poli Gigi'],
-            ['deskripsi' => 'Pemeriksaan dan Perawatan Gigi']
+            ['id_poli' => 'PL02'],
+            ['nama_poli' => 'Poli Gigi', 'deskripsi_poli' => 'Pemeriksaan dan Perawatan Gigi']
         );
         Poliklinik::updateOrCreate(
-            ['nama_poli' => 'Poli Anak'],
-            ['deskripsi' => 'Layanan Kesehatan Anak']
+            ['id_poli' => 'PL03'],
+            ['nama_poli' => 'Poli Anak', 'deskripsi_poli' => 'Layanan Kesehatan Anak']
+        );
+        Poliklinik::updateOrCreate(
+            ['id_poli' => 'PL04'],
+            ['nama_poli' => 'Poli Bedah', 'deskripsi_poli' => 'Pemeriksaan dan Operasi Ringan']
         );
 
         // 3. Data Master Dokter
         Dokter::updateOrCreate(
-            ['name' => 'dr. Saepul'],
-            ['spesialis' => 'Poli Umum', 'no_hp' => '08123456789']
+            ['id_dokter' => 'DK001'],
+            ['id_poli' => 'PL01', 'nama_dokter' => 'dr. Saepul', 'no_hp' => '08123456789']
         );
         Dokter::updateOrCreate(
-            ['name' => 'dr. Indi'],
-            ['spesialis' => 'Poli Gigi', 'no_hp' => '0812297120']
+            ['id_dokter' => 'DK002'],
+            ['id_poli' => 'PL02', 'nama_dokter' => 'dr. Indi', 'no_hp' => '0812297120']
         );
         Dokter::updateOrCreate(
-            ['name' => 'dr. Huru Hara'],
-            ['spesialis' => 'Poli Anak', 'no_hp' => '08123456781']
+            ['id_dokter' => 'DK003'],
+            ['id_poli' => 'PL03', 'nama_dokter' => 'dr. Huru Hara', 'no_hp' => '08123456781']
+        );
+        Dokter::updateOrCreate(
+            ['id_dokter' => 'DK004'],
+            ['id_poli' => 'PL04', 'nama_dokter' => 'dr. Pardede', 'no_hp' => '08123456783']
+        );
+        Dokter::updateOrCreate(
+            ['id_dokter' => 'DK005'],
+            ['id_poli' => 'PL02', 'nama_dokter' => 'dr. Joli', 'no_hp' => '08123456784']
         );
 
         // 4. Data Master Jadwal Dokter
         JadwalDokter::updateOrCreate(
-            ['dokter' => 'dr. Saepul', 'hari' => 'Senin'],
-            ['poliklinik' => 'Poli Umum', 'jam_mulai' => '08:00', 'jam_selesai' => '10:00', 'kuota' => 20]
+            ['id_jadwal' => 1],
+            ['id_dokter' => 'DK001', 'tanggal' => '2026-06-08 00:00:00', 'jam_mulai' => '08:00:00', 'jam_selesai' => '10:00:00', 'kuota' => 20]
         );
         JadwalDokter::updateOrCreate(
-            ['dokter' => 'dr. Indi', 'hari' => 'Rabu'],
-            ['poliklinik' => 'Poli Gigi', 'jam_mulai' => '08:30', 'jam_selesai' => '12:00', 'kuota' => 10]
+            ['id_jadwal' => 2],
+            ['id_dokter' => 'DK002', 'tanggal' => '2026-06-10 00:00:00', 'jam_mulai' => '08:30:00', 'jam_selesai' => '12:00:00', 'kuota' => 10]
         );
         JadwalDokter::updateOrCreate(
-            ['dokter' => 'dr. Huru Hara', 'hari' => 'Rabu'],
-            ['poliklinik' => 'Poli Anak', 'jam_mulai' => '08:00', 'jam_selesai' => '11:00', 'kuota' => 5]
+            ['id_jadwal' => 3],
+            ['id_dokter' => 'DK003', 'tanggal' => '2026-06-10 00:00:00', 'jam_mulai' => '08:00:00', 'jam_selesai' => '11:00:00', 'kuota' => 5]
+        );
+        JadwalDokter::updateOrCreate(
+            ['id_jadwal' => 4],
+            ['id_dokter' => 'DK004', 'tanggal' => '2026-06-12 00:00:00', 'jam_mulai' => '13:00:00', 'jam_selesai' => '14:00:00', 'kuota' => 15]
+        );
+        JadwalDokter::updateOrCreate(
+            ['id_jadwal' => 5],
+            ['id_dokter' => 'DK005', 'tanggal' => '2026-06-10 00:00:00', 'jam_mulai' => '10:00:00', 'jam_selesai' => '11:00:00', 'kuota' => 10]
         );
 
         // 5. Data Master Pasien
         Pasien::updateOrCreate(
-            ['nik' => '1234567890'],
+            ['id_pasien' => 'PAS001'],
             [
-                'no' => '001',
-                'name' => 'Wira Sonic',
+                'nik' => '1234567890123456',
                 'email' => 'wira@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Wira Sonic',
+                'jenis_kelamin' => 'Laki-laki',
                 'tanggal_lahir' => '2005-05-25',
                 'no_hp' => '0852497264',
                 'alamat' => 'Jalan Asoman',
@@ -132,103 +139,201 @@ class DatabaseSeeder extends Seeder
             ]
         );
         Pasien::updateOrCreate(
-            ['nik' => '0987123432'],
+            ['id_pasien' => 'PAS002'],
             [
-                'no' => '002',
-                'name' => 'Galang Rading',
+                'nik' => '0987123432000000',
                 'email' => 'galang@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Galang Rading',
+                'jenis_kelamin' => 'Laki-laki',
                 'tanggal_lahir' => '1999-06-21',
                 'no_hp' => '089621327113',
                 'alamat' => 'Gg. Kasih Mandiri',
                 'foto' => null
             ]
         );
+        Pasien::updateOrCreate(
+            ['id_pasien' => 'PAS003'],
+            [
+                'nik' => '3273010101010003',
+                'email' => 'joki@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Joki',
+                'jenis_kelamin' => 'Laki-laki',
+                'tanggal_lahir' => '2001-04-12',
+                'no_hp' => '08123456703',
+                'alamat' => 'Yogyakarta',
+                'foto' => null
+            ]
+        );
+        Pasien::updateOrCreate(
+            ['id_pasien' => 'PAS004'],
+            [
+                'nik' => '1082301982301823',
+                'email' => 'wanti@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Wanti Wanti',
+                'jenis_kelamin' => 'Perempuan',
+                'tanggal_lahir' => '1990-05-13',
+                'no_hp' => '0819291209302',
+                'alamat' => 'Sleman',
+                'foto' => null
+            ]
+        );
+        Pasien::updateOrCreate(
+            ['id_pasien' => 'PAS005'],
+            [
+                'nik' => '3273010202020002',
+                'email' => 'rino@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Rino Bleber',
+                'jenis_kelamin' => 'Laki-laki',
+                'tanggal_lahir' => '1992-06-14',
+                'no_hp' => '081237192030',
+                'alamat' => 'Yogyakarta',
+                'foto' => null
+            ]
+        );
+        Pasien::updateOrCreate(
+            ['id_pasien' => 'PAS006'],
+            [
+                'nik' => '3273010303030003',
+                'email' => 'dadang@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Dadang',
+                'jenis_kelamin' => 'Laki-laki',
+                'tanggal_lahir' => '1985-09-25',
+                'no_hp' => '081231241030',
+                'alamat' => 'Bantul',
+                'foto' => null
+            ]
+        );
+        Pasien::updateOrCreate(
+            ['id_pasien' => 'PAS007'],
+            [
+                'nik' => '3273010404040004',
+                'email' => 'ujang@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Ujang',
+                'jenis_kelamin' => 'Laki-laki',
+                'tanggal_lahir' => '2015-11-30',
+                'no_hp' => '08123456782',
+                'alamat' => 'Kulon Progo',
+                'foto' => null
+            ]
+        );
+        Pasien::updateOrCreate(
+            ['id_pasien' => 'PAS008'],
+            [
+                'nik' => '3273010505050005',
+                'email' => 'udangkeju@gmail.com',
+                'password' => Hash::make('pasien123'),
+                'nama' => 'Udang Keju',
+                'jenis_kelamin' => 'Perempuan',
+                'tanggal_lahir' => '1999-02-18',
+                'no_hp' => '081237192434',
+                'alamat' => 'Bantul',
+                'foto' => null
+            ]
+        );
 
         // 6. Data Pendaftaran (Registrasi)
         Pendaftaran::updateOrCreate(
-            ['no' => '001'],
+            ['id_pendaftaran' => 'P001'],
             [
-                'id_pendaftaran' => 'P001',
-                'tanggal' => '2026-05-08',
-                'nomor_antrean' => '505',
-                'hari' => 'Senin',
-                'jam' => '12:00',
-                'nik' => '109283019238',
-                'email' => 'keju@gmail.com',
-                'no_hp' => '081237192434',
-                'pasien' => 'Udang Keju',
-                'dokter' => 'dr. Pardede',
-                'poli' => 'Poli Bedah',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '1995-05-13',
-                'alamat' => 'Bantul',
+                'id_user' => 'PAS008',
+                'id_jadwal' => 4,
+                'tanggal_daftar' => '2026-05-08 12:00:00',
                 'keluhan' => 'Gak tau dog, kayaknya flu deh ini dog, kemarin demam gitu dog, cuma sekarang sembuh dog, cuma kadang kejang-kejang juga dog, gimana ya dog? sembuhin atuh dog, dog kan dogter!',
                 'status' => 'Selesai'
             ]
         );
         Pendaftaran::updateOrCreate(
-            ['no' => '002'],
+            ['id_pendaftaran' => 'P002'],
             [
-                'id_pendaftaran' => 'P002',
-                'tanggal' => '2026-05-08',
-                'nomor_antrean' => '506',
-                'hari' => 'Senin',
-                'jam' => '08:00',
-                'nik' => '123871023123',
-                'email' => 'rino@gmail.com',
-                'no_hp' => '081237192030',
-                'pasien' => 'Rino Bleber',
-                'dokter' => 'dr. Indi',
-                'poli' => 'Poli Umum',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '1992-06-14',
-                'alamat' => 'Yogyakarta',
+                'id_user' => 'PAS005',
+                'id_jadwal' => 2,
+                'tanggal_daftar' => '2026-05-08 08:00:00',
                 'keluhan' => 'Sakit kepala sebelah kanan saja sejak kemarin pagi, kepala terasa seperti berdenyut-denyut kencang saat beraktivitas berat.',
                 'status' => 'Menunggu'
             ]
         );
         Pendaftaran::updateOrCreate(
-            ['no' => '003'],
+            ['id_pendaftaran' => 'P003'],
             [
-                'id_pendaftaran' => 'P003',
-                'tanggal' => '2026-05-09',
-                'nomor_antrean' => '003',
-                'hari' => 'Selasa',
-                'jam' => '09:15',
-                'nik' => '102397102370',
-                'email' => 'dang@gmail.com',
-                'no_hp' => '081231241030',
-                'pasien' => 'Dadang',
-                'dokter' => 'dr. Joli',
-                'poli' => 'Poli Gigi',
-                'jenis_kelamin' => 'Laki-laki',
-                'tanggal_lahir' => '1985-09-25',
-                'alamat' => 'Bantul',
+                'id_user' => 'PAS006',
+                'id_jadwal' => 5,
+                'tanggal_daftar' => '2026-05-09 09:15:00',
                 'keluhan' => 'Gigi geraham belakang kanan bawah berlubang besar dan terasa sangat linu ketika dipakai makan manis atau minum air dingin.',
+                'status' => 'Menunggu'
+            ]
+        );
+        Pendaftaran::updateOrCreate(
+            ['id_pendaftaran' => 'P004'],
+            [
+                'id_user' => 'PAS004',
+                'id_jadwal' => 1,
+                'tanggal_daftar' => '2026-05-08 08:00:00',
+                'keluhan' => 'Badan meriang gatal-gatal di seluruh tubuh sejak kemarin malam setelah makan kepiting.',
+                'status' => 'Dipanggil'
+            ]
+        );
+        Pendaftaran::updateOrCreate(
+            ['id_pendaftaran' => 'P005'],
+            [
+                'id_user' => 'PAS007',
+                'id_jadwal' => 3,
+                'tanggal_daftar' => '2026-05-09 12:00:00',
+                'keluhan' => 'Badan anak demam naik turun sejak 3 hari lalu, pilek mampet, batuk berdahak, serta tidak mau makan sama sekali.',
                 'status' => 'Menunggu'
             ]
         );
 
         // 7. Data Antrean (Queue Beranda Pegawai)
         Antrean::updateOrCreate(
-            ['nomor_antrean' => 'U505', 'tanggal' => '2026-06-09'],
-            ['pasien' => 'Wanti Wanti', 'poli' => 'Poli Umum', 'dokter' => 'dr. Saepul', 'jam' => '08:00', 'status' => 'Dipanggil']
+            ['id_antrean' => 'ANT001'],
+            [
+                'id_pendaftaran' => 'P004',
+                'nomor_antrean' => 505,
+                'status_antrean' => 'Dipanggil',
+                'waktu_antrean' => '08:00:00'
+            ]
         );
         Antrean::updateOrCreate(
-            ['nomor_antrean' => 'G666', 'tanggal' => '2026-06-09'],
-            ['pasien' => 'Rino Bleber', 'poli' => 'Poli Gigi', 'dokter' => 'dr. Indi', 'jam' => '16:00', 'status' => 'Menunggu']
+            ['id_antrean' => 'ANT002'],
+            [
+                'id_pendaftaran' => 'P002',
+                'nomor_antrean' => 666,
+                'status_antrean' => 'Menunggu',
+                'waktu_antrean' => '16:00:00'
+            ]
         );
         Antrean::updateOrCreate(
-            ['nomor_antrean' => 'B871', 'tanggal' => '2026-06-09'],
-            ['pasien' => 'Dadang', 'poli' => 'Poli Bedah', 'dokter' => 'dr. Joli', 'jam' => '08:30', 'status' => 'Menunggu']
+            ['id_antrean' => 'ANT003'],
+            [
+                'id_pendaftaran' => 'P003',
+                'nomor_antrean' => 871,
+                'status_antrean' => 'Menunggu',
+                'waktu_antrean' => '08:30:00'
+            ]
         );
         Antrean::updateOrCreate(
-            ['nomor_antrean' => 'A645', 'tanggal' => '2026-06-09'],
-            ['pasien' => 'Ujang', 'poli' => 'Poli Anak', 'dokter' => 'dr. Huru Hara', 'jam' => '12:00', 'status' => 'Menunggu']
+            ['id_antrean' => 'ANT004'],
+            [
+                'id_pendaftaran' => 'P005',
+                'nomor_antrean' => 645,
+                'status_antrean' => 'Menunggu',
+                'waktu_antrean' => '12:00:00'
+            ]
         );
         Antrean::updateOrCreate(
-            ['nomor_antrean' => 'B143', 'tanggal' => '2026-06-09'],
-            ['pasien' => 'Udang Keju', 'poli' => 'Poli Bedah', 'dokter' => 'dr. Pardede', 'jam' => '09:00', 'status' => 'Selesai']
+            ['id_antrean' => 'ANT005'],
+            [
+                'id_pendaftaran' => 'P001',
+                'nomor_antrean' => 143,
+                'status_antrean' => 'Selesai',
+                'waktu_antrean' => '09:00:00'
+            ]
         );
     }
 }

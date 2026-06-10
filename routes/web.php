@@ -35,8 +35,22 @@ Route::post('/login', [AuthController::class, 'authenticate'])
 Route::any('/logout', [AuthController::class, 'logout'])
     ->name('logout');
 
+// Lupa Password visual flow
+Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])
+    ->name('password.forgot');
+Route::post('/forgot-password', [AuthController::class, 'forgotPasswordSend'])
+    ->name('password.forgot.send');
+Route::get('/forgot-password/verify', [AuthController::class, 'verifyOtp'])
+    ->name('password.forgot.verify');
+Route::post('/forgot-password/verify', [AuthController::class, 'verifyOtpCheck'])
+    ->name('password.forgot.verify.check');
+Route::get('/forgot-password/reset', [AuthController::class, 'resetPassword'])
+    ->name('password.forgot.reset');
+Route::post('/forgot-password/reset', [AuthController::class, 'resetPasswordSave'])
+    ->name('password.forgot.reset.save');
+
 Route::prefix('admin')
-    ->middleware(['auth'])
+    ->middleware(['auth:admin'])
     ->as('admin.')
     ->group(function () {
 
@@ -83,7 +97,7 @@ Route::prefix('admin')
     });
 
 Route::prefix('pegawai')
-    ->middleware(['auth'])
+    ->middleware(['auth:pegawai'])
     ->as('pegawai.')
     ->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Pegawai\DashboardController::class, 'index'])

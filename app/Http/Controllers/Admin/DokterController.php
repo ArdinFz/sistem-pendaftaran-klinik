@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Dokter;
+use App\Models\Poliklinik;
 use Illuminate\Http\Request;
 
 class DokterController extends Controller
@@ -17,8 +18,10 @@ class DokterController extends Controller
 
         $dokters = Dokter::query()
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('spesialis', 'like', "%{$search}%")
+                $query->where('nama_dokter', 'like', "%{$search}%")
+                      ->orWhereHas('poliklinik', function ($q) use ($search) {
+                          $q->where('nama_poli', 'like', "%{$search}%");
+                      })
                       ->orWhere('no_hp', 'like', "%{$search}%");
             })
             ->get();
@@ -45,9 +48,28 @@ class DokterController extends Controller
             'no_hp' => 'required|string|max:20'
         ]);
 
+        // Look up poliklinik or create it
+        $poli = Poliklinik::where('nama_poli', 'like', "%{$request->spesialis}%")->first();
+        if (!$poli) {
+            $latest = Poliklinik::orderBy('id_poli', 'desc')->first();
+            $num = $latest ? ((int) substr($latest->id_poli, 2) + 1) : 1;
+            $newId = 'PL' . str_pad($num, 2, '0', STR_PAD_LEFT);
+            $poli = Poliklinik::create([
+                'id_poli' => $newId,
+                'nama_poli' => $request->spesialis,
+                'deskripsi_poli' => 'Deskripsi untuk poliklinik ' . $request->spesialis,
+            ]);
+        }
+
+        // Generate Dokter ID: format DK001
+        $latestDoc = Dokter::orderBy('id_dokter', 'desc')->first();
+        $numDoc = $latestDoc ? ((int) substr($latestDoc->id_dokter, 2) + 1) : 1;
+        $newDocId = 'DK' . str_pad($numDoc, 3, '0', STR_PAD_LEFT);
+
         Dokter::create([
-            'name' => $request->name,
-            'spesialis' => $request->spesialis,
+            'id_dokter' => $newDocId,
+            'id_poli' => $poli->id_poli,
+            'nama_dokter' => $request->name,
             'no_hp' => $request->no_hp
         ]);
 
@@ -75,10 +97,23 @@ class DokterController extends Controller
             'no_hp' => 'required|string|max:20'
         ]);
 
+        // Look up poliklinik or create it
+        $poli = Poliklinik::where('nama_poli', 'like', "%{$request->spesialis}%")->first();
+        if (!$poli) {
+            $latest = Poliklinik::orderBy('id_poli', 'desc')->first();
+            $num = $latest ? ((int) substr($latest->id_poli, 2) + 1) : 1;
+            $newId = 'PL' . str_pad($num, 2, '0', STR_PAD_LEFT);
+            $poli = Poliklinik::create([
+                'id_poli' => $newId,
+                'nama_poli' => $request->spesialis,
+                'deskripsi_poli' => 'Deskripsi untuk poliklinik ' . $request->spesialis,
+            ]);
+        }
+
         $dokter = Dokter::findOrFail($id);
         $dokter->update([
-            'name' => $request->name,
-            'spesialis' => $request->spesialis,
+            'id_poli' => $poli->id_poli,
+            'nama_dokter' => $request->name,
             'no_hp' => $request->no_hp
         ]);
 

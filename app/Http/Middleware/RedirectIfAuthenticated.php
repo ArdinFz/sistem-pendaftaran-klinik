@@ -21,6 +21,19 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                if ($guard === 'admin') {
+                    return redirect()->route('admin.dashboard');
+                } elseif ($guard === 'pegawai') {
+                    return redirect()->route('pegawai.dashboard');
+                }
+                
+                $user = Auth::guard($guard)->user();
+                if ($user instanceof \App\Models\Admin) {
+                    return redirect()->route('admin.dashboard');
+                } elseif ($user instanceof \App\Models\Pegawai) {
+                    return redirect()->route('pegawai.dashboard');
+                }
+                
                 return redirect(RouteServiceProvider::HOME);
             }
         }

@@ -62,11 +62,14 @@
             <!-- Data Rows -->
             @forelse ($users as $user)
                 @php
-                    $prefix = 'USR';
-                    if ($user->role === 'admin') $prefix = 'ADM';
-                    elseif ($user->role === 'pegawai') $prefix = 'PGW';
-                    elseif ($user->role === 'pasien') $prefix = 'PSN';
-                    $formattedId = $prefix . str_pad($user->id, 3, '0', STR_PAD_LEFT);
+                    $formattedId = $user->id;
+                    if (is_numeric($user->id)) {
+                        $prefix = 'USR';
+                        if ($user->role === 'admin') $prefix = 'ADM';
+                        elseif ($user->role === 'pegawai') $prefix = 'PGW';
+                        elseif ($user->role === 'pasien') $prefix = 'PSN';
+                        $formattedId = $prefix . str_pad($user->id, 3, '0', STR_PAD_LEFT);
+                    }
                 @endphp
                 <div class="grid grid-cols-6 gap-2 text-center items-center text-gray-600 text-sm">
                     <!-- ID -->

@@ -47,6 +47,13 @@
                     </div>
                 @endif
 
+                <!-- Alert Sukses -->
+                @if (session('success'))
+                    <div class="mb-4 bg-emerald-100 border-l-4 border-emerald-500 text-emerald-700 p-4 rounded-r-lg text-sm" role="alert">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
                 <form action="{{ route('authenticate') }}" method="POST" class="space-y-6">
                     @csrf
                     <!-- Input Email / Nomor HP -->
@@ -68,6 +75,13 @@
                         class="w-full bg-[#005b66] hover:bg-[#004a54] text-white font-bold py-4 px-6 rounded-lg text-xl transition-colors shadow-md active:scale-[0.98]">
                         Masuk
                     </button>
+
+                    <!-- Lupa Kata Sandi Link -->
+                    <div class="text-right">
+                        <a href="{{ route('password.forgot') }}" class="text-[#005b66] hover:underline font-medium text-lg">
+                            Lupa Kata Sandi?
+                        </a>
+                    </div>
                 </form>
             </div>
 

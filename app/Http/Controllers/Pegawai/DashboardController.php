@@ -55,8 +55,8 @@ class DashboardController extends Controller
         $antrean = Antrean::findOrFail($id);
 
         if ($antrean->status === 'Menunggu') {
-            $antrean->update(['status' => 'Dipanggil']);
-            Pendaftaran::where('pasien', $antrean->pasien)->update(['status' => 'Dipanggil']);
+            $antrean->update(['status_antrean' => 'Dipanggil']);
+            Pendaftaran::where('id_pendaftaran', $antrean->id_pendaftaran)->update(['status' => 'Dipanggil']);
             return redirect()->route('pegawai.dashboard')
                 ->with('success', 'Pasien berhasil dipanggil ke ruang periksa.');
         }
@@ -73,8 +73,8 @@ class DashboardController extends Controller
         $antrean = Antrean::findOrFail($id);
 
         if ($antrean->status === 'Dipanggil' || $antrean->status === 'Menunggu') {
-            $antrean->update(['status' => 'Selesai']);
-            Pendaftaran::where('pasien', $antrean->pasien)->update(['status' => 'Selesai']);
+            $antrean->update(['status_antrean' => 'Selesai']);
+            Pendaftaran::where('id_pendaftaran', $antrean->id_pendaftaran)->update(['status' => 'Selesai']);
             return redirect()->route('pegawai.dashboard')
                 ->with('success', 'Pemeriksaan pasien selesai.');
         }

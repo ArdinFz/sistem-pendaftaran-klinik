@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('polikliniks', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama_poli');
-            $table->text('deskripsi');
+            $table->string('id_poli', 4)->primary();
+            $table->string('nama_poli', 100);
+            $table->text('deskripsi_poli');
             $table->timestamps();
         });
     }

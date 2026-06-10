@@ -21,9 +21,9 @@
     <div class="flex flex-1">
         
         <!-- Sidebar Menu Kiri -->
-        @if(Auth::user()->role === 'admin')
+        @if(Auth::guard('admin')->check())
             @include('backend.admin.layouts.sidebar')
-        @elseif(Auth::user()->role === 'pegawai')
+        @elseif(Auth::guard('pegawai')->check())
             @include('backend.pegawai.layouts.sidebar')
         @endif
 

@@ -83,10 +83,7 @@
                     <div class="bg-white border border-gray-200 rounded-lg p-3 font-semibold col-span-1">{{ $item['nomor_antrean'] }}</div>
                     
                     <!-- Nama Pasien -->
-                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2 flex items-center space-x-2">
-                        <div class="w-6 h-6 rounded-full bg-teal-50 flex items-center justify-center border border-gray-200 text-teal-600 font-bold text-[10px]">
-                            {{ strtoupper(substr($item['pasien'], 0, 1)) }}
-                        </div>
+                    <div class="bg-white border border-gray-200 rounded-lg p-3 text-left font-medium col-span-2">
                         <span class="truncate" title="{{ $item['pasien'] }}">{{ $item['pasien'] }}</span>
                     </div>
                     

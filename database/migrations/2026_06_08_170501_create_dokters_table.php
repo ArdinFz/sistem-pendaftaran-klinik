@@ -12,11 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('dokters', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('spesialis');
-            $table->string('no_hp');
+            $table->string('id_dokter', 5)->primary();
+            $table->string('id_poli', 4);
+            $table->string('nama_dokter', 100);
+            $table->string('no_hp', 13);
             $table->timestamps();
+
+            $table->foreign('id_poli')
+                  ->references('id_poli')
+                  ->on('polikliniks')
+                  ->onDelete('cascade');
         });
     }
 

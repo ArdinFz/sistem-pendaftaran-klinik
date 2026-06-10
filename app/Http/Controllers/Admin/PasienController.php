@@ -17,7 +17,7 @@ class PasienController extends Controller
 
         $pasiens = Pasien::query()
             ->when($search, function ($query, $search) {
-                $query->where('name', 'like', "%{$search}%")
+                $query->where('nama', 'like', "%{$search}%")
                       ->orWhere('nik', 'like', "%{$search}%")
                       ->orWhere('email', 'like', "%{$search}%")
                       ->orWhere('alamat', 'like', "%{$search}%")
@@ -64,7 +64,7 @@ class PasienController extends Controller
         $pasien = Pasien::findOrFail($id);
 
         $pasienData = [
-            'name' => $request->name,
+            'nama' => $request->name,
             'nik' => $request->nik,
             'email' => $request->email,
             'tanggal_lahir' => $request->tanggal_lahir,

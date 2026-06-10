@@ -21,27 +21,33 @@ class PendaftaranController extends Controller
         $selectedPoli = $request->input('poli');
         $selectedDokter = $request->input('dokter');
 
-        $pendaftarans = Pendaftaran::query()
+        $pendaftaransQuery = Pendaftaran::query()
             ->when($tanggalAwal, function ($query, $tanggalAwal) {
-                $query->whereDate('tanggal', '>=', $tanggalAwal);
+                $query->whereDate('tanggal_daftar', '>=', $tanggalAwal);
             })
             ->when($tanggalAkhir, function ($query, $tanggalAkhir) {
-                $query->whereDate('tanggal', '<=', $tanggalAkhir);
+                $query->whereDate('tanggal_daftar', '<=', $tanggalAkhir);
             })
             ->when($selectedPoli && $selectedPoli !== 'Semua Poli', function ($query) use ($selectedPoli) {
-                $query->where('poli', $selectedPoli);
-            })
-            ->when($selectedDokter && $selectedDokter !== 'Semua Dokter', function ($query) use ($selectedDokter) {
-                $query->where('dokter', $selectedDokter);
-            })
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('pasien', 'like', "%{$search}%")
-                      ->orWhere('nik', 'like', "%{$search}%");
+                $query->whereHas('jadwalDokter.dokter.poliklinik', function ($q) use ($selectedPoli) {
+                    $q->where('nama_poli', $selectedPoli);
                 });
             })
-            ->orderBy('jam', 'asc')
-            ->get();
+            ->when($selectedDokter && $selectedDokter !== 'Semua Dokter', function ($query) use ($selectedDokter) {
+                $query->whereHas('jadwalDokter.dokter', function ($q) use ($selectedDokter) {
+                    $q->where('nama_dokter', $selectedDokter);
+                });
+            })
+            ->when($search, function ($query, $search) {
+                $query->whereHas('pasien', function ($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                      ->orWhere('nik', 'like', "%{$search}%");
+                });
+            });
+
+        $pendaftarans = $pendaftaransQuery->get()->sortBy(function($item) {
+            return $item->jadwalDokter ? $item->jadwalDokter->jam_mulai : '00:00:00';
+        });
 
         $polikliniks = Poliklinik::all();
         $dokters = Dokter::all();
@@ -56,7 +62,7 @@ class PendaftaranController extends Controller
      */
     public function show(string $id)
     {
-        $pendaftaran = Pendaftaran::where('no', $id)->firstOrFail();
+        $pendaftaran = Pendaftaran::where('id_pendaftaran', $id)->firstOrFail();
 
         return view('backend.pegawai.pendaftaran.show', compact('pendaftaran'));
     }
