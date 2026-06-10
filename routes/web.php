@@ -100,4 +100,7 @@ Route::prefix('pegawai')
 
         Route::get('/pendaftaran', [App\Http\Controllers\Pegawai\PendaftaranController::class, 'index'])
             ->name('pendaftaran.index');
+
+        Route::get('/pendaftaran/{id}', [App\Http\Controllers\Pegawai\PendaftaranController::class, 'show'])
+            ->name('pendaftaran.show');
     });

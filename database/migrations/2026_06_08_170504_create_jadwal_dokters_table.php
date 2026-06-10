@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('jadwal_dokters', function (Blueprint $table) {
             $table->id();
+            $table->string('dokter');
+            $table->string('poliklinik');
+            $table->string('hari');
+            $table->string('jam_mulai');
+            $table->string('jam_selesai');
+            $table->integer('kuota');
             $table->timestamps();
         });
     }

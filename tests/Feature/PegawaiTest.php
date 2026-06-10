@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Models\Antrean;
+use App\Models\Pendaftaran;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -51,46 +53,96 @@ class PegawaiTest extends TestCase
     public function test_pegawai_can_panggil_patient(): void
     {
         $pegawai = User::where('role', 'pegawai')->first();
+        $dadang = Antrean::where('pasien', 'Dadang')->firstOrFail();
 
-        // 3 is Dadang (status Menunggu by default)
+        // Call panggil with Dadang's dynamic ID
         $response = $this->actingAs($pegawai)
-            ->post(route('pegawai.dashboard.panggil', 3));
+            ->post(route('pegawai.dashboard.panggil', $dadang->id));
 
         $response->assertRedirect(route('pegawai.dashboard'));
         $response->assertSessionHas('success');
 
-        // Check if status updated in session
-        $antreans = session('antrean_list');
-        $dadang = collect($antreans)->firstWhere('id', 3);
-        $this->assertEquals('Dipanggil', $dadang['status']);
+        // Check if status updated in database
+        $this->assertDatabaseHas('antreans', [
+            'id' => $dadang->id,
+            'status' => 'Dipanggil'
+        ]);
+
+        // Check if synchronized status in pendaftarans table (Dadang is Pendaftaran with no '003')
+        $this->assertDatabaseHas('pendaftarans', [
+            'no' => '003',
+            'status' => 'Dipanggil'
+        ]);
     }
 
     public function test_pegawai_can_selesai_patient(): void
     {
         $pegawai = User::where('role', 'pegawai')->first();
+        $dadang = Antrean::where('pasien', 'Dadang')->firstOrFail();
 
-        // 3 is Dadang
+        // Call selesai with Dadang's dynamic ID
         $response = $this->actingAs($pegawai)
-            ->post(route('pegawai.dashboard.selesai', 3));
+            ->post(route('pegawai.dashboard.selesai', $dadang->id));
 
         $response->assertRedirect(route('pegawai.dashboard'));
         $response->assertSessionHas('success');
 
-        // Check if status updated in session
-        $antreans = session('antrean_list');
-        $dadang = collect($antreans)->firstWhere('id', 3);
-        $this->assertEquals('Selesai', $dadang['status']);
+        // Check if status updated in database
+        $this->assertDatabaseHas('antreans', [
+            'id' => $dadang->id,
+            'status' => 'Selesai'
+        ]);
+
+        // Check if synchronized status in pendaftarans table
+        $this->assertDatabaseHas('pendaftarans', [
+            'no' => '003',
+            'status' => 'Selesai'
+        ]);
     }
 
-    public function test_pegawai_can_access_pendaftaran(): void
+    public function test_pegawai_can_access_pendaftaran_with_filters(): void
     {
         $pegawai = User::where('role', 'pegawai')->first();
 
+        // Access index page
         $response = $this->actingAs($pegawai)
             ->get(route('pegawai.pendaftaran.index'));
 
         $response->assertStatus(200);
         $response->assertSee('Data Pendaftaran');
-        $response->assertSee('Wanti Wanti');
+        $response->assertSee('Udang Keju');
+        $response->assertSee('Rino Bleber');
+
+        // Access with search filter
+        $responseFiltered = $this->actingAs($pegawai)
+            ->get(route('pegawai.pendaftaran.index', ['search' => 'Udang']));
+        
+        $responseFiltered->assertSee('Udang Keju');
+        $responseFiltered->assertDontSee('Rino Bleber');
+
+        // Access with poli filter
+        $responsePoli = $this->actingAs($pegawai)
+            ->get(route('pegawai.pendaftaran.index', ['poli' => 'Poli Bedah']));
+        
+        $responsePoli->assertSee('Udang Keju');
+        $responsePoli->assertDontSee('Rino Bleber');
+    }
+
+    public function test_pegawai_can_view_pendaftaran_detail(): void
+    {
+        $pegawai = User::where('role', 'pegawai')->first();
+
+        // Access detail page for 001 (Udang Keju)
+        $response = $this->actingAs($pegawai)
+            ->get(route('pegawai.pendaftaran.show', '001'));
+
+        $response->assertStatus(200);
+        $response->assertSee('Detail Pendaftaran Pasien');
+        $response->assertSee('P001');
+        $response->assertSee('Udang Keju');
+        $response->assertSee('Poli Bedah');
+        $response->assertSee('dr. Pardede');
+        $response->assertSee('Bantul');
+        $response->assertSee('Gak tau dog');
     }
 }

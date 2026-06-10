@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('antreans', function (Blueprint $table) {
             $table->id();
+            $table->string('nomor_antrean');
+            $table->string('pasien');
+            $table->string('poli');
+            $table->string('dokter');
+            $table->string('jam');
+            $table->string('status')->default('Menunggu');
+            $table->date('tanggal');
             $table->timestamps();
         });
     }

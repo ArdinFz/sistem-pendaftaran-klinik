@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Poliklinik extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['nama_poli', 'deskripsi'];
 }

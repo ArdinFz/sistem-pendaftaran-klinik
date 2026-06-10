@@ -3,64 +3,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dokter;
 use Illuminate\Http\Request;
 
 class DokterController extends Controller
 {
-    // Helper untuk mengambil data dokter dari session (atau inisialisasi default)
-    private function getDokters()
-    {
-        if (session()->has('dokter_list')) {
-            $list = session()->get('dokter_list');
-            // Reset jika format lama berbeda
-            if (count($list) > 0 && !array_key_exists('spesialis', $list[0])) {
-                session()->forget('dokter_list');
-            }
-        }
-
-        if (!session()->has('dokter_list')) {
-            $defaultDokters = [
-                [
-                    'id' => 1,
-                    'name' => 'dr. Saepul',
-                    'spesialis' => 'Poli Umum',
-                    'no_hp' => '08123456789'
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'dr. Indi',
-                    'spesialis' => 'Poli Gigi',
-                    'no_hp' => '0812297120'
-                ],
-                [
-                    'id' => 3,
-                    'name' => 'dr. Huru Hara',
-                    'spesialis' => 'Poli Anak',
-                    'no_hp' => '08123456781'
-                ]
-            ];
-            session()->put('dokter_list', $defaultDokters);
-        }
-        return collect(session()->get('dokter_list'));
-    }
-
     /**
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
         $search = $request->input('search');
-        $doktersRaw = $this->getDokters();
 
-        if ($search) {
-            $doktersRaw = $doktersRaw->filter(function($item) use ($search) {
-                return stripos($item['name'], $search) !== false ||
-                       stripos($item['spesialis'], $search) !== false ||
-                       stripos($item['no_hp'], $search) !== false;
-            });
-        }
-
-        $dokters = $doktersRaw;
+        $dokters = Dokter::query()
+            ->when($search, function ($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                      ->orWhere('spesialis', 'like', "%{$search}%")
+                      ->orWhere('no_hp', 'like', "%{$search}%");
+            })
+            ->get();
 
         return view('backend.admin.dokter.index', compact('dokters', 'search'));
     }
@@ -84,22 +45,11 @@ class DokterController extends Controller
             'no_hp' => 'required|string|max:20'
         ]);
 
-        $list = session()->get('dokter_list', []);
-        
-        $newId = 1;
-        if (count($list) > 0) {
-            $newId = max(array_column($list, 'id')) + 1;
-        }
-
-        $newDokter = [
-            'id' => $newId,
+        Dokter::create([
             'name' => $request->name,
             'spesialis' => $request->spesialis,
             'no_hp' => $request->no_hp
-        ];
-
-        $list[] = $newDokter;
-        session()->put('dokter_list', $list);
+        ]);
 
         return redirect()->route('admin.dokter.index')
             ->with('success', 'Dokter berhasil ditambahkan.');
@@ -110,13 +60,7 @@ class DokterController extends Controller
      */
     public function edit(string $id)
     {
-        $dokters = $this->getDokters();
-        $dokter = $dokters->firstWhere('id', (int)$id);
-
-        if (!$dokter) {
-            abort(404, 'Data dokter tidak ditemukan.');
-        }
-
+        $dokter = Dokter::findOrFail($id);
         return view('backend.admin.dokter.edit', compact('dokter'));
     }
 
@@ -131,24 +75,12 @@ class DokterController extends Controller
             'no_hp' => 'required|string|max:20'
         ]);
 
-        $list = session()->get('dokter_list', []);
-        $found = false;
-
-        foreach ($list as &$item) {
-            if ($item['id'] == (int)$id) {
-                $item['name'] = $request->name;
-                $item['spesialis'] = $request->spesialis;
-                $item['no_hp'] = $request->no_hp;
-                $found = true;
-                break;
-            }
-        }
-
-        if (!$found) {
-            abort(404, 'Data dokter tidak ditemukan.');
-        }
-
-        session()->put('dokter_list', $list);
+        $dokter = Dokter::findOrFail($id);
+        $dokter->update([
+            'name' => $request->name,
+            'spesialis' => $request->spesialis,
+            'no_hp' => $request->no_hp
+        ]);
 
         return redirect()->route('admin.dokter.index')
             ->with('success', 'Data dokter berhasil diperbarui.');
@@ -159,12 +91,8 @@ class DokterController extends Controller
      */
     public function destroy(string $id)
     {
-        $list = session()->get('dokter_list', []);
-        $newList = array_filter($list, function($item) use ($id) {
-            return $item['id'] != (int)$id;
-        });
-
-        session()->put('dokter_list', array_values($newList));
+        $dokter = Dokter::findOrFail($id);
+        $dokter->delete();
 
         return redirect()->route('admin.dokter.index')
             ->with('success', 'Data dokter berhasil dihapus.');
