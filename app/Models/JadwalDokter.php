@@ -24,6 +24,21 @@ class JadwalDokter extends Model
         'tanggal' => 'datetime',
     ];
 
+    public function getTanggalAttribute($value)
+    {
+        if (!$value) {
+            return null;
+        }
+        $timezone = 'Asia/Jakarta';
+        $originalDate = \Carbon\Carbon::parse($value);
+        $dayOfWeek = $originalDate->dayOfWeekIso; // 1 = Monday, 7 = Sunday
+        
+        $now = \Carbon\Carbon::now($timezone);
+        $startOfWeek = $now->copy()->startOfWeek(\Carbon\Carbon::MONDAY);
+        
+        return $startOfWeek->addDays($dayOfWeek - 1)->startOfDay();
+    }
+
     public function dokter()
     {
         return $this->belongsTo(Dokter::class, 'id_dokter', 'id_dokter');

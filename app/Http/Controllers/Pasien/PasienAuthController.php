@@ -21,6 +21,69 @@ class PasienAuthController extends Controller
         return view('welcome');
     }
 
+    // Halaman Layanan Klinik (Daftar Poli)
+    public function layanan()
+    {
+        return view('frontend.layanan.index');
+    }
+
+    // Halaman Detail Poli Umum
+    public function layananUmum()
+    {
+        return view('frontend.layanan.umum');
+    }
+
+    // Halaman Cara Daftar
+    public function caraDaftar()
+    {
+        return view('frontend.cara_daftar');
+    }
+
+    // Halaman Tentang Klinik
+    public function tentangKlinik()
+    {
+        return view('frontend.tentang_klinik');
+    }
+
+    // Halaman Tips Kesehatan (Daftar Artikel)
+    public function tipsKesehatan()
+    {
+        return view('frontend.tips_kesehatan.index');
+    }
+
+    // Halaman Detail Artikel Begadang
+    public function tipsKesehatanBegadang()
+    {
+        return view('frontend.tips_kesehatan.detail');
+    }
+
+    // Halaman Jadwal Dokter
+    public function jadwalDokter()
+    {
+        $schedules = \App\Models\JadwalDokter::with('dokter.poliklinik')
+            ->orderBy('tanggal', 'asc')
+            ->orderBy('jam_mulai', 'asc')
+            ->get();
+
+        // Ambil list tanggal unik
+        $dates = $schedules->pluck('tanggal')
+            ->map(function($date) {
+                return $date->format('Y-m-d');
+            })
+            ->unique()
+            ->values()
+            ->map(function($dateStr) {
+                return \Carbon\Carbon::parse($dateStr);
+            });
+
+        // Group schedules by Y-m-d
+        $groupedSchedules = $schedules->groupBy(function($schedule) {
+            return $schedule->tanggal->format('Y-m-d');
+        });
+
+        return view('frontend.jadwal.index', compact('dates', 'groupedSchedules'));
+    }
+
     // Halaman Landing/Welcome Entry (memiliki tombol Daftar & Masuk)
     public function welcome()
     {
@@ -299,23 +362,27 @@ class PasienAuthController extends Controller
                 $q->where('id_poli', $id_poli);
             });
 
-        if ($tanggal) {
-            $query->whereDate('tanggal', $tanggal);
-        }
-
         $schedules = $query->get();
 
-        $data = $schedules->map(function ($s) {
+        if ($tanggal) {
+            $targetDayOfWeek = \Carbon\Carbon::parse($tanggal)->dayOfWeekIso;
+            $schedules = $schedules->filter(function ($s) use ($targetDayOfWeek) {
+                return $s->tanggal->dayOfWeekIso === $targetDayOfWeek;
+            });
+        }
+
+        $data = $schedules->map(function ($s) use ($tanggal) {
+            $displayDate = $tanggal ? \Carbon\Carbon::parse($tanggal) : $s->tanggal;
             return [
                 'id_jadwal' => $s->id_jadwal,
                 'nama_dokter' => $s->dokter,
                 'jam_mulai' => date('H:i', strtotime($s->jam_mulai)),
                 'jam_selesai' => date('H:i', strtotime($s->jam_selesai)),
-                'tanggal' => $s->tanggal->format('Y-m-d'),
-                'tanggal_formatted' => $s->tanggal->format('d-m-Y'),
+                'tanggal' => $displayDate->format('Y-m-d'),
+                'tanggal_formatted' => $displayDate->format('d-m-Y'),
                 'hari' => $s->hari,
             ];
-        });
+        })->values();
 
         return response()->json($data);
     }

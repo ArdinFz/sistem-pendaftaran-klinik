@@ -120,6 +120,13 @@ Route::prefix('pegawai')
 // Frontend
 Route::prefix('pasien')->as('pasien.')->group(function () {
     Route::get('/welcome', [App\Http\Controllers\Pasien\PasienAuthController::class, 'welcome'])->name('welcome');
+    Route::get('/layanan', [App\Http\Controllers\Pasien\PasienAuthController::class, 'layanan'])->name('layanan');
+    Route::get('/layanan/umum', [App\Http\Controllers\Pasien\PasienAuthController::class, 'layananUmum'])->name('layanan.umum');
+    Route::get('/cara-daftar', [App\Http\Controllers\Pasien\PasienAuthController::class, 'caraDaftar'])->name('cara-daftar');
+    Route::get('/tentang-klinik', [App\Http\Controllers\Pasien\PasienAuthController::class, 'tentangKlinik'])->name('tentang-klinik');
+    Route::get('/tips-kesehatan', [App\Http\Controllers\Pasien\PasienAuthController::class, 'tipsKesehatan'])->name('tips-kesehatan');
+    Route::get('/tips-kesehatan/begadang', [App\Http\Controllers\Pasien\PasienAuthController::class, 'tipsKesehatanBegadang'])->name('tips-kesehatan.begadang');
+    Route::get('/jadwal', [App\Http\Controllers\Pasien\PasienAuthController::class, 'jadwalDokter'])->name('jadwal');
     Route::middleware('guest:pasien')->group(function () {
         Route::get('/login', [App\Http\Controllers\Pasien\PasienAuthController::class, 'loginForm'])->name('login');
         Route::post('/login', [App\Http\Controllers\Pasien\PasienAuthController::class, 'login'])->name('login.post');

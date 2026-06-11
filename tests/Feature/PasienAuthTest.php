@@ -13,8 +13,15 @@ class PasienAuthTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        \Carbon\Carbon::setTestNow('2026-06-11 14:11:49');
         // Seed the database to ensure we have default master data
         $this->seed();
+    }
+
+    protected function tearDown(): void
+    {
+        \Carbon\Carbon::setTestNow();
+        parent::tearDown();
     }
 
     public function test_pasien_can_view_welcome_page(): void
@@ -281,6 +288,137 @@ class PasienAuthTest extends TestCase
             'status_antrean' => 'Menunggu',
             'waktu_antrean' => '08:00:00',
         ]);
+    }
+
+    public function test_pasien_and_guest_can_access_layanan_klinik_page(): void
+    {
+        // Test as Guest
+        $response = $this->get(route('pasien.layanan'));
+        $response->assertStatus(200);
+        $response->assertSee('Daftar Poli');
+        $response->assertSee('Poli Umum');
+        $response->assertSee('Poli Gigi');
+        $response->assertSee('poli_umum.png');
+        $response->assertSee('poli_gigi.png');
+
+        // Test as Authenticated Pasien
+        $pasien = Pasien::first(); // PAS001
+        $responseAuth = $this->actingAs($pasien, 'pasien')->get(route('pasien.layanan'));
+        $responseAuth->assertStatus(200);
+        $responseAuth->assertSee('Daftar Poli');
+    }
+
+    public function test_pasien_and_guest_can_access_layanan_umum_detail_page(): void
+    {
+        // Test as Guest
+        $response = $this->get(route('pasien.layanan.umum'));
+        $response->assertStatus(200);
+        $response->assertSee('Poli Umum');
+        $response->assertSee('doctor_patient.png');
+        $response->assertSee('dr. Ryan Kongkap');
+        $response->assertSee('dr. Ibnu Rujak');
+        $response->assertSee('Jadwal Layanan');
+
+        // Test as Authenticated Pasien
+        $pasien = Pasien::first(); // PAS001
+        $responseAuth = $this->actingAs($pasien, 'pasien')->get(route('pasien.layanan.umum'));
+        $responseAuth->assertStatus(200);
+        $responseAuth->assertSee('Poli Umum');
+    }
+
+    public function test_pasien_and_guest_can_access_cara_daftar_page(): void
+    {
+        // Test as Guest
+        $response = $this->get(route('pasien.cara-daftar'));
+        $response->assertStatus(200);
+        $response->assertSee('Cara Daftar');
+        $response->assertSee('Cara Daftar Antrean Online');
+        $response->assertSee('Buat akun, tekan tombol “Daftar”');
+        $response->assertSee('doctor_patient.png');
+
+        // Test as Authenticated Pasien
+        $pasien = Pasien::first(); // PAS001
+        $responseAuth = $this->actingAs($pasien, 'pasien')->get(route('pasien.cara-daftar'));
+        $responseAuth->assertStatus(200);
+        $responseAuth->assertSee('Cara Daftar');
+    }
+
+    public function test_pasien_and_guest_can_access_tentang_klinik_page(): void
+    {
+        // Test as Guest
+        $response = $this->get(route('pasien.tentang-klinik'));
+        $response->assertStatus(200);
+        $response->assertSee('Tentang Klinik');
+        $response->assertSee('Klinik Bombardiro Crocodilo');
+        $response->assertSee('Menjadi klinik pelayanan kesehatan yang memberikan layanan medis');
+        $response->assertSee('Misi');
+        $response->assertSee('08:00 - 20:00 WIB');
+        $response->assertSee('Jl. Cibaduyut, Kecamatan Pesugihan');
+        $response->assertSee('maps.png');
+        $response->assertSee('Instagram : klinik_bombardirocrocodilo');
+
+        // Test as Authenticated Pasien
+        $pasien = Pasien::first(); // PAS001
+        $responseAuth = $this->actingAs($pasien, 'pasien')->get(route('pasien.tentang-klinik'));
+        $responseAuth->assertStatus(200);
+        $responseAuth->assertSee('Tentang Klinik');
+    }
+
+    public function test_pasien_and_guest_can_access_tips_kesehatan_pages(): void
+    {
+        // Test List Page as Guest
+        $response = $this->get(route('pasien.tips-kesehatan'));
+        $response->assertStatus(200);
+        $response->assertSee('Tips Kesehatan');
+        $response->assertSee('Terlalu Sering Begadang?');
+        $response->assertSee('tips_begadang.png');
+
+        // Test Detail Page as Guest
+        $responseDetail = $this->get(route('pasien.tips-kesehatan.begadang'));
+        $responseDetail->assertStatus(200);
+        $responseDetail->assertSee('Terlalu Sering Begadang?');
+        $responseDetail->assertSee('1. Sulit Konsentrasi');
+        $responseDetail->assertSee('2. Rentan Mengalami Kecelakaan');
+        $responseDetail->assertSee('3. Munculnya Penyakit Serius');
+        $responseDetail->assertSee('Stroke;');
+        $responseDetail->assertSee('Diabetes;');
+        $responseDetail->assertSee('tips_begadang.png');
+
+        // Test as Authenticated Pasien
+        $pasien = Pasien::first(); // PAS001
+        $responseAuth = $this->actingAs($pasien, 'pasien')->get(route('pasien.tips-kesehatan'));
+        $responseAuth->assertStatus(200);
+        $responseAuth->assertSee('Tips Kesehatan');
+
+        $responseAuthDetail = $this->actingAs($pasien, 'pasien')->get(route('pasien.tips-kesehatan.begadang'));
+        $responseAuthDetail->assertStatus(200);
+        $responseAuthDetail->assertSee('Terlalu Sering Begadang?');
+    }
+
+    public function test_pasien_and_guest_can_access_jadwal_dokter_page(): void
+    {
+        // Test as Guest
+        $response = $this->get(route('pasien.jadwal'));
+        $response->assertStatus(200);
+        $response->assertSee('Jadwal Dokter');
+        // Seeded dates are 2026-06-08 (Senin), 2026-06-10 (Rabu), 2026-06-12 (Jumat)
+        $response->assertSee('Sen');
+        $response->assertSee('08 Jun');
+        $response->assertSee('Rab');
+        $response->assertSee('10 Jun');
+        $response->assertSee('Jum');
+        $response->assertSee('12 Jun');
+        // Saepul is on 2026-06-08
+        $response->assertSee('dr. Saepul');
+        $response->assertSee('Poli Umum');
+        $response->assertSee('08:00 - 10:00');
+
+        // Test as Authenticated Pasien
+        $pasien = Pasien::first(); // PAS001
+        $responseAuth = $this->actingAs($pasien, 'pasien')->get(route('pasien.jadwal'));
+        $responseAuth->assertStatus(200);
+        $responseAuth->assertSee('Jadwal Dokter');
+        $responseAuth->assertSee('dr. Saepul');
     }
 }
 

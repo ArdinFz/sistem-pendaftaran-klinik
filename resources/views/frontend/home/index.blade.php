@@ -61,44 +61,44 @@
     <div class="grid grid-cols-3 gap-3">
         
         <!-- Layanan Klinik -->
-        <button onclick="alert('Menu Layanan Klinik segera hadir')" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <a href="{{ route('pasien.layanan') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
             <div class="w-[72px] h-[72px] flex items-center justify-center overflow-hidden">
                 <img src="{{ asset('assets/images/layanan.png') }}" alt="Layanan Klinik" class="w-full h-full object-contain">
             </div>
             <span class="text-[10px] font-bold text-[#005b66] text-center leading-tight">Layanan Klinik</span>
-        </button>
+        </a>
 
         <!-- Jadwal Dokter -->
-        <button onclick="alert('Menu Jadwal Dokter segera hadir')" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <a href="{{ route('pasien.jadwal') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
             <div class="w-[72px] h-[72px] flex items-center justify-center overflow-hidden">
                 <img src="{{ asset('assets/images/jadwal.png') }}" alt="Jadwal Dokter" class="w-full h-full object-contain">
             </div>
             <span class="text-[10px] font-bold text-[#005b66] text-center leading-tight">Jadwal Dokter</span>
-        </button>
+        </a>
 
         <!-- Cara Daftar -->
-        <button onclick="alert('Menu Petunjuk Cara Daftar segera hadir')" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <a href="{{ route('pasien.cara-daftar') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
             <div class="w-[72px] h-[72px] flex items-center justify-center overflow-hidden">
                 <img src="{{ asset('assets/images/cara_daftar.png') }}" alt="Cara Daftar" class="w-full h-full object-contain">
             </div>
             <span class="text-[10px] font-bold text-[#005b66] text-center leading-tight">Cara Daftar</span>
-        </button>
+        </a>
 
         <!-- Tentang Klinik -->
-        <button onclick="alert('Menu Profil Klinik segera hadir')" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <a href="{{ route('pasien.tentang-klinik') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
             <div class="w-[72px] h-[72px] flex items-center justify-center overflow-hidden">
                 <img src="{{ asset('assets/images/tentang_klinik.png') }}" alt="Tentang Klinik" class="w-full h-full object-contain">
             </div>
             <span class="text-[10px] font-bold text-[#005b66] text-center leading-tight">Tentang Klinik</span>
-        </button>
+        </a>
 
         <!-- Tips Kesehatan -->
-        <button onclick="alert('Menu Artikel & Tips Kesehatan segera hadir')" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <a href="{{ route('pasien.tips-kesehatan') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
             <div class="w-[72px] h-[72px] flex items-center justify-center overflow-hidden">
                 <img src="{{ asset('assets/images/tips_kesehatan.png') }}" alt="Tips Kesehatan" class="w-full h-full object-contain">
             </div>
             <span class="text-[10px] font-bold text-[#005b66] text-center leading-tight">Tips Kesehatan</span>
-        </button>
+        </a>
 
         <!-- SOS (Statis) -->
         <button onclick="alert('Menghubungi bantuan darurat klinik...')" class="bg-white border border-red-500 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
