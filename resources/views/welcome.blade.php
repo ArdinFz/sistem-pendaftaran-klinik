@@ -21,7 +21,8 @@
 <body class="medical-pattern min-h-screen flex flex-col pb-24 select-none">
 
     <!-- Header / Top Bar -->
-    <header class="bg-white border-b border-gray-100 py-3.5 px-6 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+    <header class="bg-white border-b border-gray-100 py-3.5 px-6 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto flex justify-between items-center">
         <!-- Logo -->
         <div class="flex items-center space-x-2">
             <img src="{{ asset('assets/images/logo.png') }}" alt="Logo Klinik" class="h-10 w-auto object-contain">
@@ -47,10 +48,11 @@
                 </a>
             @endauth
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Main Container (Width increased by ~7% to 480px for better visibility) -->
-    <main class="flex-1 max-w-[480px] w-full mx-auto px-5 py-6 space-y-6">
+    <!-- Main Container -->
+    <main class="flex-1 max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto px-5 py-6 space-y-6">
         
         <!-- Top Cards: Antrean Online & Cek Antrean (Sized as original design) -->
         <div class="grid grid-cols-2 gap-4">
@@ -92,15 +94,15 @@
                     <p class="text-[11px] text-gray-500 leading-relaxed">Pantau nomor antrean secara langsung</p>
                 </div>
                 
-                <button onclick="alert('Fitur pantau antrean langsung segera hadir!')" class="w-full bg-[#005b66] text-white hover:bg-[#004a54] transition-colors font-bold py-2 rounded-md text-xs shadow-sm mt-3">
+                <button onclick="openAuthModal()" class="w-full bg-[#005b66] text-white hover:bg-[#004a54] transition-colors font-bold py-2 rounded-md text-xs shadow-sm mt-3">
                     Cek Antrean
                 </button>
             </div>
 
         </div>
 
-        <!-- Middle Grid: 6 Items (enlarged icons to 72px) -->
-        <div class="grid grid-cols-3 gap-3">
+        <!-- Middle Grid: 6 Items -->
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
             
             <!-- Layanan Klinik -->
             <a href="{{ route('pasien.layanan') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
@@ -164,7 +166,7 @@
     </main>
 
     <!-- Bottom Navigation Bar (Sticky/Fixed) -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#005b66] text-teal-100 flex h-16 shadow-lg z-30 border-t border-[#004d57]">
+    <nav class="fixed bottom-0 left-0 right-0 max-w-[480px] md:max-w-3xl lg:max-w-5xl mx-auto bg-[#005b66] text-teal-100 flex h-16 shadow-lg z-30 border-t border-[#004d57] md:rounded-t-xl">
         
         <!-- Beranda (Active) -->
         <a href="{{ route('pasien.home') }}" class="flex-1 h-full flex flex-col items-center justify-center space-y-0.5 text-white bg-[#1a2c35] border-r border-[#004d57]">

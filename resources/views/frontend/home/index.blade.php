@@ -8,7 +8,7 @@
             <p class="text-xs text-teal-100 leading-relaxed font-medium">Jadi ceritanya ini tampilan kalo dah login, yaudah sih gitu ajah</p>
         </div>
         <!-- Notification Bell -->
-        <button onclick="alert('Tidak ada notifikasi baru saat ini')" class="text-white hover:text-teal-200 transition-colors p-1 focus:outline-none">
+        <button class="text-white hover:text-teal-250 p-1 focus:outline-none cursor-default">
             <!-- Bell Icon SVG -->
             <svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -58,7 +58,7 @@
     </div>
 
     <!-- Services Grid: 6 Items -->
-    <div class="grid grid-cols-3 gap-3">
+    <div class="grid grid-cols-3 md:grid-cols-6 gap-3">
         
         <!-- Layanan Klinik -->
         <a href="{{ route('pasien.layanan') }}" class="bg-white border border-teal-600 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
@@ -101,12 +101,12 @@
         </a>
 
         <!-- SOS (Statis) -->
-        <button onclick="alert('Menghubungi bantuan darurat klinik...')" class="bg-white border border-red-500 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm hover:scale-[1.02] active:scale-[0.98] transition-all">
+        <div class="bg-white border border-red-500 rounded-md p-2.5 flex flex-col items-center justify-center space-y-1.5 shadow-sm">
             <div class="w-12 h-12 flex items-center justify-center bg-red-600 rounded-full shadow-inner">
                 <span class="text-white font-extrabold text-sm">SOS</span>
             </div>
             <span class="text-[10px] font-bold text-red-600 text-center leading-tight">Bantuan Darurat</span>
-        </button>
+        </div>
 
     </div>
 

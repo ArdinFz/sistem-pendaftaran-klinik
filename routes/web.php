@@ -146,6 +146,7 @@ Route::prefix('pasien')->as('pasien.')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\Pasien\PasienAuthController::class, 'dashboard'])->name('dashboard');
         Route::post('/logout', [App\Http\Controllers\Pasien\PasienAuthController::class, 'logout'])->name('logout');
         Route::get('/get-schedules', [App\Http\Controllers\Pasien\PasienAuthController::class, 'getSchedules'])->name('get-schedules');
+        Route::get('/get-queues', [App\Http\Controllers\Pasien\PasienAuthController::class, 'getQueueStatus'])->name('get-queues');
         Route::post('/pendaftaran/simpan', [App\Http\Controllers\Pasien\PasienAuthController::class, 'storePendaftaran'])->name('pendaftaran.store');
     });
 });

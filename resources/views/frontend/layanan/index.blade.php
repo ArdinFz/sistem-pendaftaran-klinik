@@ -21,24 +21,26 @@
 <body class="medical-pattern min-h-screen flex flex-col pb-6 select-none">
 
     <!-- Header / Top Bar -->
-    <header class="bg-[#005b66] text-white py-4 px-6 flex items-center relative sticky top-0 z-40 shadow-md max-w-[480px] mx-auto w-full">
-        <a href="{{ Auth::guard('pasien')->check() ? route('pasien.dashboard') : route('pasien.home') }}" class="absolute left-6 hover:opacity-80 transition-opacity">
-            <!-- Back Arrow SVG -->
-            <svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-        </a>
-        <h1 class="w-full text-center font-bold text-lg">Layanan Klinik</h1>
+    <header class="bg-[#005b66] text-white py-4 px-6 sticky top-0 z-40 shadow-md">
+        <div class="max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto flex items-center relative">
+            <a href="{{ Auth::guard('pasien')->check() ? route('pasien.dashboard') : route('pasien.home') }}" class="absolute left-0 hover:opacity-80 transition-opacity">
+                <!-- Back Arrow SVG -->
+                <svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <h1 class="w-full text-center font-bold text-lg">Layanan Klinik</h1>
+        </div>
     </header>
 
     <!-- Main Container -->
-    <main class="flex-1 max-w-[480px] w-full mx-auto px-5 py-6 space-y-6">
+    <main class="flex-1 max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto px-5 py-6 space-y-6">
         
         <!-- Section Title -->
         <h2 class="text-lg font-bold text-gray-900 tracking-wide">Daftar Poli</h2>
 
         <!-- List Poli Cards -->
-        <div class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             
             <!-- Poli Umum (Clickable) -->
             <a href="{{ route('pasien.layanan.umum') }}" class="flex items-center justify-between bg-white border border-gray-250 rounded-lg p-4 shadow-sm hover:border-[#005b66]/60 hover:shadow transition-all active:scale-[0.99] group">

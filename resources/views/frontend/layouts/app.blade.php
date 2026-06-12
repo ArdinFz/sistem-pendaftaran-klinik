@@ -24,7 +24,7 @@
     @include('frontend.layouts.top_bar')
 
     <!-- Main Container -->
-    <main class="flex-1 max-w-[480px] w-full mx-auto px-5 py-6">
+    <main class="flex-1 max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto px-5 py-6">
         @yield('content')
     </main>
 
@@ -88,7 +88,147 @@
             if (tabParam) {
                 switchTab(tabParam);
             }
+            @auth('pasien')
+                startQueueAutoRefresh();
+            @endauth
         });
+
+        // Periodically refresh the queue statuses every 5 seconds to stay connected in real-time with the Pegawai dashboard
+        function startQueueAutoRefresh() {
+            setInterval(() => {
+                fetch('{{ route('pasien.get-queues') }}')
+                    .then(response => {
+                        if (!response.ok) throw new Error('Network response not ok');
+                        return response.json();
+                    })
+                    .then(data => {
+                        // 1. Update called antreans
+                        const calledContainer = document.getElementById('called-antreans-container');
+                        if (calledContainer) {
+                            if (data.calledAntreans.length === 0) {
+                                calledContainer.innerHTML = `
+                                    <div class="bg-white rounded-md p-4 text-center border border-teal-100">
+                                        <span class="text-xs text-gray-400 font-semibold italic">Belum ada antrean yang sedang dipanggil</span>
+                                    </div>
+                                `;
+                            } else {
+                                let html = '';
+                                data.calledAntreans.forEach(item => {
+                                    html += `
+                                        <div class="bg-white rounded-md p-4 text-gray-800 shadow-sm border border-teal-100">
+                                            <h3 class="text-sm font-bold text-[#005b66] pb-1.5 border-b border-gray-100">${item.poli}</h3>
+                                            <div class="pt-2 text-center">
+                                                <span class="text-[10px] text-gray-450 font-semibold block">Nomor yang sedang dipanggil</span>
+                                                <span class="text-4xl font-extrabold text-[#005b66] tracking-wide block mt-1">
+                                                    ${item.nomor_antrean_formatted}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    `;
+                                });
+                                calledContainer.innerHTML = html;
+                            }
+                        }
+
+                        // 2. Update all antreans (Daftar Antrean Hari Ini)
+                        const allContainer = document.getElementById('all-antreans-container');
+                        if (allContainer) {
+                            if (data.allAntreans.length === 0) {
+                                allContainer.innerHTML = `
+                                    <div class="p-6 text-center text-xs text-gray-400 font-semibold italic border-t border-gray-150">
+                                        Tidak ada antrean hari ini
+                                    </div>
+                                `;
+                            } else {
+                                let html = '';
+                                data.allAntreans.forEach(item => {
+                                    let badgeHtml = '';
+                                    if (item.status_antrean === 'Selesai') {
+                                        badgeHtml = `
+                                            <span class="bg-[#005b66] text-white px-3 py-1 rounded text-[10px] font-bold flex items-center space-x-1">
+                                                <svg class="w-3.5 h-3.5 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                                </svg>
+                                                Selesai
+                                            </span>
+                                        `;
+                                    } else if (item.status_antrean === 'Dipanggil') {
+                                        badgeHtml = `
+                                            <span class="bg-[#005b66] text-white px-3 py-1 rounded text-[10px] font-bold flex items-center space-x-1 animate-pulse">
+                                                <svg class="w-3.5 h-3.5 mr-1 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707" />
+                                                </svg>
+                                                Sedang Dipanggil
+                                            </span>
+                                        `;
+                                    } else {
+                                        badgeHtml = `
+                                            <span class="bg-gray-400 text-white px-3 py-1 rounded text-[10px] font-bold flex items-center space-x-1">
+                                                <svg class="w-3.5 h-3.5 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                                Menunggu
+                                            </span>
+                                        `;
+                                    }
+
+                                    html += `
+                                        <div class="flex justify-between items-center p-3.5">
+                                            <span class="text-base font-bold text-[#005b66]">${item.nomor_antrean_formatted}</span>
+                                            ${badgeHtml}
+                                        </div>
+                                    `;
+                                });
+                                allContainer.innerHTML = html;
+                            }
+                        }
+
+                        // 3. Update detail antrean status badge
+                        const detailStatusBadge = document.getElementById('detail-antrean-status-badge');
+                        if (detailStatusBadge && data.myLatestAntrean) {
+                            const status = data.myLatestAntrean.status_antrean;
+                            let badgeHtml = '';
+                            if (status === 'Selesai') {
+                                badgeHtml = `
+                                    <span class="bg-[#005b66] text-white px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                        Selesai
+                                    </span>
+                                `;
+                            } else if (status === 'Dipanggil') {
+                                badgeHtml = `
+                                    <span class="bg-[#005b66] text-white px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1 animate-pulse">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-white animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707" />
+                                        </svg>
+                                        Sedang Dipanggil
+                                    </span>
+                                `;
+                            } else {
+                                badgeHtml = `
+                                    <span class="bg-gray-400 text-white px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1">
+                                        <svg class="w-3.5 h-3.5 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Menunggu
+                                    </span>
+                                `;
+                            }
+                            detailStatusBadge.innerHTML = badgeHtml;
+                        }
+
+                        const detailEstimated = document.getElementById('detail-estimated-wait-time');
+                        if (detailEstimated && data.myLatestAntrean) {
+                            detailEstimated.innerText = data.myLatestAntrean.estimatedWaitTime;
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Error refreshing queue status:', err);
+                    });
+            }, 5000);
+        }
 
         // AJAX: Load Doctor Schedules based on selected Poli and Date
         function loadDoctorSchedules() {

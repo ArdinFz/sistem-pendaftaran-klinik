@@ -37,4 +37,9 @@ class Pegawai extends Authenticatable
     {
         return $this->nama_pegawai;
     }
+
+    public function getIdAttribute()
+    {
+        return $this->id_pegawai;
+    }
 }

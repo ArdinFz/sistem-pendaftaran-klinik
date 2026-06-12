@@ -239,7 +239,8 @@ class PasienAuthController extends Controller
                 $estimatedWaitTime = 'Sedang dipanggil / diperiksa';
             } else {
                 // Menunggu
-                $poliId = $myLatestAntrean->pendaftaran->jadwalDokter->dokter->id_poli;
+                $dokter = $myLatestAntrean->pendaftaran->jadwalDokter->dokter()->first();
+                $poliId = $dokter ? $dokter->id_poli : null;
                 $myId = $myLatestAntrean->id_antrean;
                 $aheadCount = Antrean::where('status_antrean', '!=', 'Selesai')
                     ->where('id_antrean', '<', $myId)
@@ -463,6 +464,82 @@ class PasienAuthController extends Controller
             'tanggal' => $tanggalIndo,
             'jam' => $pendaftaran->jam,
             'id_pendaftaran' => $newIdP,
+        ]);
+    }
+
+    // Ambil status antrean terbaru via AJAX (GET /pasien/get-queues)
+    public function getQueueStatus()
+    {
+        $pasien = Auth::guard('pasien')->user();
+        if (!$pasien) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        // Fetch called queues ('Dipanggil')
+        $calledAntreans = Antrean::where('status_antrean', 'Dipanggil')
+            ->with('pendaftaran.pasien', 'pendaftaran.jadwalDokter.dokter.poliklinik')
+            ->orderBy('waktu_antrean', 'asc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'poli' => $item->poli,
+                    'nomor_antrean' => $item->nomor_antrean,
+                    'nomor_antrean_formatted' => sprintf("%03d", $item->nomor_antrean)
+                ];
+            });
+
+        // Fetch all queues in the database sequentially
+        $allAntreans = Antrean::with('pendaftaran.pasien', 'pendaftaran.jadwalDokter.dokter.poliklinik')
+            ->orderBy('id_antrean', 'asc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'nomor_antrean' => $item->nomor_antrean,
+                    'nomor_antrean_formatted' => sprintf("%03d", $item->nomor_antrean),
+                    'status_antrean' => $item->status_antrean
+                ];
+            });
+
+        // Fetch current patient's latest queue registration
+        $myLatestAntrean = Antrean::whereHas('pendaftaran', function($q) use ($pasien) {
+                $q->where('id_user', $pasien->id_pasien);
+            })
+            ->with('pendaftaran.jadwalDokter.dokter.poliklinik')
+            ->latest('created_at')
+            ->first();
+
+        $myStatus = null;
+        $estimatedWaitTime = '';
+        if ($myLatestAntrean) {
+            $myStatus = $myLatestAntrean->status_antrean;
+            if ($myStatus === 'Selesai') {
+                $estimatedWaitTime = 'Selesai diperiksa';
+            } elseif ($myStatus === 'Dipanggil') {
+                $estimatedWaitTime = 'Sedang dipanggil / diperiksa';
+            } else {
+                // Menunggu
+                $dokter = $myLatestAntrean->pendaftaran->jadwalDokter->dokter()->first();
+                $poliId = $dokter ? $dokter->id_poli : null;
+                $myId = $myLatestAntrean->id_antrean;
+                $aheadCount = Antrean::where('status_antrean', '!=', 'Selesai')
+                    ->where('id_antrean', '<', $myId)
+                    ->whereHas('pendaftaran.jadwalDokter.dokter', function($q) use ($poliId) {
+                        $q->where('id_poli', $poliId);
+                    })
+                    ->count();
+
+                $minutes = ($aheadCount + 1) * 15;
+                $estimatedWaitTime = $minutes . ' menit lagi';
+            }
+        }
+
+        return response()->json([
+            'calledAntreans' => $calledAntreans,
+            'allAntreans' => $allAntreans,
+            'myLatestAntrean' => $myLatestAntrean ? [
+                'status_antrean' => $myLatestAntrean->status_antrean,
+                'estimatedWaitTime' => $estimatedWaitTime
+            ] : null
         ]);
     }
 }

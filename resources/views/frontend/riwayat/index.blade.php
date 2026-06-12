@@ -7,7 +7,7 @@
     </div>
     <hr class="border-gray-150 -mx-5 mb-4">
 
-    <div class="space-y-4" id="riwayat-list-container">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="riwayat-list-container">
         @php
             $months = [
                 1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
@@ -48,7 +48,7 @@
                 </p>
             </div>
         @empty
-            <div class="text-center py-16 bg-white rounded-lg border border-gray-150 p-6 shadow-sm">
+            <div class="col-span-full text-center py-16 bg-white rounded-lg border border-gray-150 p-6 shadow-sm">
                 <p class="text-xs text-gray-450 font-semibold italic">Belum ada riwayat kunjungan yang selesai.</p>
             </div>
         @endforelse

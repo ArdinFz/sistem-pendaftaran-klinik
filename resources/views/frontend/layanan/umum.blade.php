@@ -21,58 +21,63 @@
 <body class="medical-pattern min-h-screen flex flex-col pb-6 select-none">
 
     <!-- Header / Top Bar -->
-    <header class="bg-[#005b66] text-white py-4 px-6 flex items-center relative sticky top-0 z-40 shadow-md max-w-[480px] mx-auto w-full">
-        <a href="{{ route('pasien.layanan') }}" class="absolute left-6 hover:opacity-80 transition-opacity">
-            <!-- Back Arrow SVG -->
-            <svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
-            </svg>
-        </a>
-        <h1 class="w-full text-center font-bold text-lg">Poli Umum</h1>
+    <header class="bg-[#005b66] text-white py-4 px-6 sticky top-0 z-40 shadow-md">
+        <div class="max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto flex items-center relative">
+            <a href="{{ route('pasien.layanan') }}" class="absolute left-0 hover:opacity-80 transition-opacity">
+                <!-- Back Arrow SVG -->
+                <svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+            </a>
+            <h1 class="w-full text-center font-bold text-lg">Poli Umum</h1>
+        </div>
     </header>
 
     <!-- Main Container -->
-    <main class="flex-1 max-w-[480px] w-full mx-auto px-5 py-6">
+    <main class="flex-1 max-w-[480px] md:max-w-3xl lg:max-w-5xl w-full mx-auto px-5 py-6">
         
         <!-- Detail Card -->
-        <div class="bg-white border border-[#005b66]/20 rounded-md p-5 shadow-sm space-y-4">
-            
-            <!-- Illustration -->
-            <div class="w-full max-w-[280px] mx-auto flex justify-center items-center py-2">
-                <img src="{{ asset('assets/images/doctor_patient.png') }}" alt="Ilustrasi Poli Umum" class="w-full h-auto object-contain">
+        <div class="bg-white border border-[#005b66]/20 rounded-md p-5 shadow-sm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                <!-- Illustration -->
+                <div class="w-full max-w-[280px] mx-auto flex justify-center items-center py-2">
+                    <img src="{{ asset('assets/images/doctor_patient.png') }}" alt="Ilustrasi Poli Umum" class="w-full h-auto object-contain">
+                </div>
+
+                <!-- Text details -->
+                <div class="space-y-4">
+                    <!-- Title & Description -->
+                    <div class="space-y-2">
+                        <span class="font-extrabold text-base border-b-2 border-[#005b66] pb-0.5 inline-block text-gray-900">Poli Umum</span>
+                        <p class="text-[11px] text-gray-500 font-bold leading-relaxed">
+                            Layanan pemeriksaan kesehatan untuk menangani keluhan dan penyakit umum, seperti demam, batuk, flu, serta konsultasi kesehatan dasar.
+                        </p>
+                    </div>
+
+                    <hr class="border-[#005b66]/10 my-4">
+
+                    <!-- Dokter yang Bertugas -->
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-900 mb-2">Dokter yang Bertugas</h4>
+                        <ul class="list-disc pl-5 text-[11px] text-[#1f2937] font-bold space-y-1">
+                            <li>dr. Ryan Kongkap</li>
+                            <li>dr. Ibnu Rujak</li>
+                        </ul>
+                    </div>
+
+                    <hr class="border-[#005b66]/10 my-4">
+
+                    <!-- Jadwal Layanan -->
+                    <div>
+                        <h4 class="text-xs font-bold text-gray-900 mb-2">Jadwal Layanan</h4>
+                        <ul class="list-disc pl-5 text-[11px] text-[#1f2937] font-bold space-y-1">
+                            <li>Senin – Jumat : 08.00 – 15.00 WIB</li>
+                            <li>Sabtu : 08.00 – 12.00 WIB</li>
+                            <li>Minggu : Tergantung Mood</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-
-            <!-- Title & Description -->
-            <div class="space-y-2">
-                <span class="font-extrabold text-base border-b-2 border-[#005b66] pb-0.5 inline-block text-gray-900">Poli Umum</span>
-                <p class="text-[11px] text-gray-500 font-bold leading-relaxed">
-                    Layanan pemeriksaan kesehatan untuk menangani keluhan dan penyakit umum, seperti demam, batuk, flu, serta konsultasi kesehatan dasar.
-                </p>
-            </div>
-
-            <hr class="border-[#005b66]/10 my-4">
-
-            <!-- Dokter yang Bertugas -->
-            <div>
-                <h4 class="text-xs font-bold text-gray-900 mb-2">Dokter yang Bertugas</h4>
-                <ul class="list-disc pl-5 text-[11px] text-[#1f2937] font-bold space-y-1">
-                    <li>dr. Ryan Kongkap</li>
-                    <li>dr. Ibnu Rujak</li>
-                </ul>
-            </div>
-
-            <hr class="border-[#005b66]/10 my-4">
-
-            <!-- Jadwal Layanan -->
-            <div>
-                <h4 class="text-xs font-bold text-gray-900 mb-2">Jadwal Layanan</h4>
-                <ul class="list-disc pl-5 text-[11px] text-[#1f2937] font-bold space-y-1">
-                    <li>Senin – Jumat : 08.00 – 15.00 WIB</li>
-                    <li>Sabtu : 08.00 – 12.00 WIB</li>
-                    <li>Minggu : Tergantung Mood</li>
-                </ul>
-            </div>
-
         </div>
 
     </main>

@@ -1,4 +1,4 @@
-<nav class="fixed bottom-0 left-0 right-0 bg-[#005b66] text-teal-100 flex h-16 shadow-lg z-30 border-t border-[#004d57]">
+<nav class="fixed bottom-0 left-0 right-0 max-w-[480px] md:max-w-3xl lg:max-w-5xl mx-auto bg-[#005b66] text-teal-100 flex h-16 shadow-lg z-30 border-t border-[#004d57] md:rounded-t-xl">
     
     <!-- Tab Beranda Button -->
     <button id="nav-btn-beranda" onclick="switchTab('beranda')" class="flex-1 h-full flex flex-col items-center justify-center space-y-0.5 text-white bg-[#1a2c35] border-r border-[#004d57] nav-btn">

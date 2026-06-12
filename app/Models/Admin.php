@@ -37,4 +37,9 @@ class Admin extends Authenticatable
     {
         return $this->Nama;
     }
+
+    public function getIdAttribute()
+    {
+        return $this->id_admin;
+    }
 }

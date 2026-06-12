@@ -37,9 +37,8 @@ class JadwalDokterController extends Controller
     public function create()
     {
         $dokters = Dokter::all()->pluck('nama_dokter')->toArray();
-        $polikliniks = Poliklinik::all()->pluck('nama_poli')->toArray();
 
-        return view('backend.admin.jadwal_dokter.create', compact('dokters', 'polikliniks'));
+        return view('backend.admin.jadwal_dokter.create', compact('dokters'));
     }
 
     /**
@@ -49,15 +48,25 @@ class JadwalDokterController extends Controller
     {
         $request->validate([
             'dokter' => 'required|string',
-            'poliklinik' => 'required|string',
-            'tanggal' => 'required|date',
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'jam_mulai' => 'required|string',
             'jam_selesai' => 'required|string',
             'kuota' => 'required|integer|min:1'
         ]);
 
         $dokterObj = Dokter::where('nama_dokter', $request->dokter)->firstOrFail();
-        $tanggal = date('Y-m-d 00:00:00', strtotime($request->tanggal));
+        
+        $dayMap = [
+            'Senin' => '2026-06-08 00:00:00',
+            'Selasa' => '2026-06-09 00:00:00',
+            'Rabu' => '2026-06-10 00:00:00',
+            'Kamis' => '2026-06-11 00:00:00',
+            'Jumat' => '2026-06-12 00:00:00',
+            'Sabtu' => '2026-06-13 00:00:00',
+            'Minggu' => '2026-06-14 00:00:00',
+        ];
+        
+        $tanggal = $dayMap[$request->hari];
 
         JadwalDokter::create([
             'id_dokter' => $dokterObj->id_dokter,
@@ -78,9 +87,8 @@ class JadwalDokterController extends Controller
     {
         $jadwal = JadwalDokter::findOrFail($id);
         $dokters = Dokter::all()->pluck('nama_dokter')->toArray();
-        $polikliniks = Poliklinik::all()->pluck('nama_poli')->toArray();
 
-        return view('backend.admin.jadwal_dokter.edit', compact('jadwal', 'dokters', 'polikliniks'));
+        return view('backend.admin.jadwal_dokter.edit', compact('jadwal', 'dokters'));
     }
 
     /**
@@ -90,15 +98,25 @@ class JadwalDokterController extends Controller
     {
         $request->validate([
             'dokter' => 'required|string',
-            'poliklinik' => 'required|string',
-            'tanggal' => 'required|date',
+            'hari' => 'required|string|in:Senin,Selasa,Rabu,Kamis,Jumat,Sabtu,Minggu',
             'jam_mulai' => 'required|string',
             'jam_selesai' => 'required|string',
             'kuota' => 'required|integer|min:1'
         ]);
 
         $dokterObj = Dokter::where('nama_dokter', $request->dokter)->firstOrFail();
-        $tanggal = date('Y-m-d 00:00:00', strtotime($request->tanggal));
+        
+        $dayMap = [
+            'Senin' => '2026-06-08 00:00:00',
+            'Selasa' => '2026-06-09 00:00:00',
+            'Rabu' => '2026-06-10 00:00:00',
+            'Kamis' => '2026-06-11 00:00:00',
+            'Jumat' => '2026-06-12 00:00:00',
+            'Sabtu' => '2026-06-13 00:00:00',
+            'Minggu' => '2026-06-14 00:00:00',
+        ];
+        
+        $tanggal = $dayMap[$request->hari];
 
         $jadwal = JadwalDokter::findOrFail($id);
         $jadwal->update([

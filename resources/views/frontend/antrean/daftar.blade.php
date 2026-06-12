@@ -4,40 +4,45 @@
     <div id="antrean-form-wrapper" class="space-y-6">
         <h3 class="text-base font-extrabold text-[#005b66] tracking-wide border-l-4 border-[#005b66] pl-2">Pendaftaran Antrean</h3>
         
-        <div class="bg-white border border-teal-600 rounded-lg p-5 shadow-sm space-y-4">
+        <div class="bg-white border border-teal-600 rounded-lg p-5 shadow-sm">
             <form id="real-antrean-form" onsubmit="submitRealPendaftaran(event)" class="space-y-4">
                 @csrf
                 
-                <!-- Pilih Poli -->
-                <div>
-                    <label for="select-poli" class="block text-xs font-semibold text-[#005b66] mb-1">Pilih Poli</label>
-                    <select id="select-poli" required onchange="loadDoctorSchedules()" class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-                        <option value="">Pilih Poli Tujuan</option>
-                        @foreach ($polikliniks as $poli)
-                            <option value="{{ $poli->id_poli }}">{{ $poli->nama_poli }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Sisi Kiri: Pilihan Poli, Tanggal, Dokter -->
+                    <div class="space-y-4">
+                        <!-- Pilih Poli -->
+                        <div>
+                            <label for="select-poli" class="block text-xs font-semibold text-[#005b66] mb-1">Pilih Poli</label>
+                            <select id="select-poli" required onchange="loadDoctorSchedules()" class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option value="">Pilih Poli Tujuan</option>
+                                @foreach ($polikliniks as $poli)
+                                    <option value="{{ $poli->id_poli }}">{{ $poli->nama_poli }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                <!-- Pilih Tanggal Daftar -->
-                <div>
-                    <label for="select-date" class="block text-xs font-semibold text-[#005b66] mb-1">Pilih Tanggal Daftar</label>
-                    <input type="date" required id="select-date" onchange="loadDoctorSchedules()" class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                </div>
+                        <!-- Pilih Tanggal Daftar -->
+                        <div>
+                            <label for="select-date" class="block text-xs font-semibold text-[#005b66] mb-1">Pilih Tanggal Daftar</label>
+                            <input type="date" required id="select-date" onchange="loadDoctorSchedules()" class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                        </div>
 
-                <!-- Pilih Dokter (Jadwal) -->
-                <div>
-                    <label for="select-dokter" class="block text-xs font-semibold text-[#005b66] mb-1">Pilih Dokter</label>
-                    <select id="select-dokter" name="id_jadwal" required class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
-                        <option value="">Pilih Jadwal Dokter</option>
-                    </select>
-                    <p id="schedule-info-text" class="text-[10px] text-gray-400 mt-1 italic hidden"></p>
-                </div>
+                        <!-- Pilih Dokter (Jadwal) -->
+                        <div>
+                            <label for="select-dokter" class="block text-xs font-semibold text-[#005b66] mb-1">Pilih Dokter</label>
+                            <select id="select-dokter" name="id_jadwal" required class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-teal-500">
+                                <option value="">Pilih Jadwal Dokter</option>
+                            </select>
+                            <p id="schedule-info-text" class="text-[10px] text-gray-400 mt-1 italic hidden"></p>
+                        </div>
+                    </div>
 
-                <!-- Keluhan -->
-                <div>
-                    <label for="keluhan" class="block text-xs font-semibold text-[#005b66] mb-1">Keluhan</label>
-                    <textarea id="keluhan" name="keluhan" placeholder="Isi Keluhan Anda" required class="w-full px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 h-28 focus:outline-none focus:ring-2 focus:ring-teal-500"></textarea>
+                    <!-- Sisi Kanan: Keluhan -->
+                    <div class="flex flex-col">
+                        <label for="keluhan" class="block text-xs font-semibold text-[#005b66] mb-1">Keluhan</label>
+                        <textarea id="keluhan" name="keluhan" placeholder="Isi Keluhan Anda" required class="w-full flex-1 px-3 py-2 border border-teal-600 rounded-md text-xs font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[120px] md:min-h-0"></textarea>
+                    </div>
                 </div>
 
                 <!-- Tombol Simpan -->
