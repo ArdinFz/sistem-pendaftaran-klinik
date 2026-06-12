@@ -226,7 +226,8 @@ class PasienAuthController extends Controller
                 $q->where('id_user', $pasien->id_pasien);
             })
             ->with('pendaftaran.jadwalDokter.dokter.poliklinik')
-            ->latest('created_at')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id_antrean', 'desc')
             ->first();
 
         // Calculate dynamic estimated waiting time
@@ -505,7 +506,8 @@ class PasienAuthController extends Controller
                 $q->where('id_user', $pasien->id_pasien);
             })
             ->with('pendaftaran.jadwalDokter.dokter.poliklinik')
-            ->latest('created_at')
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id_antrean', 'desc')
             ->first();
 
         $myStatus = null;

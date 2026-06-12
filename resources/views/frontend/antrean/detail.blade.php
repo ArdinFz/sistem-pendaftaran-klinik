@@ -22,7 +22,7 @@
                             {{ sprintf("%03d", $myLatestAntrean->nomor_antrean) }}
                         </span>
                     </div>
-                    <div class="mt-2">
+                    <div class="mt-2" id="detail-antrean-status-badge">
                         @if($myLatestAntrean->status_antrean === 'Selesai')
                             <span class="bg-[#005b66] text-white px-2.5 py-1 rounded text-[10px] font-bold flex items-center space-x-1">
                                 <svg class="w-3.5 h-3.5 mr-1 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3">
@@ -84,7 +84,7 @@
                 <div class="bg-[#005b66] text-white rounded-md p-5 shadow-sm flex justify-between items-center">
                     <div class="space-y-1">
                         <span class="text-xs text-teal-100 font-semibold block">Estimasi Waktu</span>
-                        <span class="text-xl font-bold block">{{ $estimatedWaitTime }}</span>
+                        <span class="text-xl font-bold block" id="detail-estimated-wait-time">{{ $estimatedWaitTime }}</span>
                     </div>
                     <div class="w-10 h-10 flex items-center justify-center bg-white/10 rounded-full">
                         <!-- Clock SVG (White) -->
