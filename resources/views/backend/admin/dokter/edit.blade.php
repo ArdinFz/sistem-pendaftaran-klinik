@@ -33,9 +33,16 @@
 
         <!-- Keahlian -->
         <div>
-            <label for="spesialis" class="block text-sm font-bold text-gray-700 mb-1.5">Keahlian</label>
-            <input type="text" name="spesialis" id="spesialis" value="{{ old('spesialis', $dokter['spesialis']) }}" required placeholder="Masukkan Keahlian (Contoh: Poli Umum)"
+            <label for="id_poli" class="block text-sm font-bold text-gray-700 mb-1.5">Keahlian (Poli)</label>
+            <select name="id_poli" id="id_poli" required
                 class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-[#005b66] bg-white">
+                <option value="">Pilih Poliklinik</option>
+                @foreach ($polikliniks as $poli)
+                    <option value="{{ $poli->id_poli }}" {{ old('id_poli', $dokter->id_poli) == $poli->id_poli ? 'selected' : '' }}>
+                        {{ $poli->nama_poli }}
+                    </option>
+                @endforeach
+            </select>
         </div>
 
         <!-- Nomor Hp -->
